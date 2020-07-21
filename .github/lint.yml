@@ -19,5 +19,4 @@ jobs:
           VALIDATE_MD: true
           VALIDATE_TSX: true
           VALIDATE_TS: true
-          VALIDATE_JAVASCRIPT_ES: true
           VALIDATE_CSS: true
