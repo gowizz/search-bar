@@ -47,7 +47,7 @@
   fill: black;
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1025px) {
   .search_input {
     width: 89%;
   }
