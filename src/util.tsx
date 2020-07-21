@@ -1,50 +1,93 @@
-import * as process from 'process';
-
 export function searchTermInLocalStorage(name: string): boolean {
-  const keyword = 'gowiz_search_suggestion_' + name;
+  const keyword = 'gowiz_search_suggestion';
   if (keyword in localStorage) {
     const object = JSON.parse(localStorage.getItem(keyword));
-    if (new Date(object.timestamp).getTime() > new Date().getTime()) {
-      return true;
+    for (let i = 0; i < object.length; i++) {
+      if (object[i].query === name) {
+        return new Date(object[i].timestamp).getTime() > new Date().getTime();
+      }
     }
-    removeSearchTermFromLocalStorage(name);
   }
   return false;
 }
 
 export function getSearchTermsInLocalStorage(): string[] {
-  //TODO: we should remove values that have been expired
-  const ls = { ...localStorage };
+  const keyword = 'gowiz_search_suggestion';
+  let current_values = JSON.parse(localStorage.getItem(keyword));
+  const current_timestamp = new Date().getTime();
+  if (current_values == null || current_values.length < 1) {
+    return [];
+  }
 
-  let items = Object.keys(ls).map(function (key) {
-    return [key, ls[key]];
-  });
+  let original_current_values_len = current_values.length;
 
-  items.sort(function (first, second) {
-    return JSON.parse(second[1]).timestamp - JSON.parse(first[1]).timestamp;
-  });
-
-  let search_terms = [];
-
-  for (let index in items) {
-    const array = items[index];
-    if (array[0].includes('gowiz_search_suggestion_')) {
-      search_terms.push(array[0].split('gowiz_search_suggestion_')[1]);
-      //TODO: we should check if values has expired and then remove it
+  for (let i = 0; i < current_values.length; i++) {
+    if (current_values[i].timestamp < current_timestamp) {
+      current_values[i] = null;
     }
+  }
+  current_values = current_values.filter(function (el) {
+    return el != null;
+  });
+  if (current_values.length != original_current_values_len) {
+    localStorage.setItem(keyword, JSON.stringify(current_values));
+  }
+  current_values.sort(function (first, second) {
+    return second.timestamp - first.timestamp;
+  });
+  let search_terms = [];
+  for (let i = 0; i < current_values.length; i++) {
+    search_terms.push(current_values[i].query);
   }
   return search_terms;
 }
 export function removeSearchTermFromLocalStorage(name: string): void {
-  const keyword = 'gowiz_search_suggestion_' + name;
-  localStorage.removeItem(keyword);
+  const keyword = 'gowiz_search_suggestion';
+  let current_values = JSON.parse(localStorage.getItem(keyword));
+  let update_was_made = false;
+
+  if (current_values == null || current_values.length < 1) {
+    current_values = [];
+  }
+  for (let i = 0; i < current_values.length; i++) {
+    if (current_values[i].query === name) {
+      current_values[i] = null;
+      update_was_made = true;
+      break;
+    }
+  }
+  current_values = current_values.filter(function (el) {
+    return el != null;
+  });
+  if (update_was_made) {
+    if (current_values.length == 0) {
+      localStorage.removeItem(keyword);
+    } else {
+      localStorage.setItem(keyword, JSON.stringify(current_values));
+    }
+  }
 }
 
 export function addSearchTermToLocalStorage(name: string): void {
-  const keyword = 'gowiz_search_suggestion_' + name;
-  const expiry_timestamp = new Date(new Date().getTime() + performance.now() + 2592000000).getTime(); // + 30 days
-  const object = { timestamp: expiry_timestamp };
-  localStorage.setItem(keyword, JSON.stringify(object));
+  const keyword = 'gowiz_search_suggestion';
+  let current_values = JSON.parse(localStorage.getItem(keyword));
+  let expiry_timestamp = new Date(new Date().getTime() + performance.now() + 2592000000).getTime();
+  let obj = { query: name, timestamp: expiry_timestamp };
+  let update_was_made = false;
+  if (current_values == null || current_values.length < 1) {
+    current_values = [];
+  }
+  for (let i = 0; i < current_values.length; i++) {
+    if (current_values[i].query === name) {
+      current_values[i] = obj;
+      update_was_made = true;
+      break;
+    }
+  }
+  if (current_values.length == 0 || update_was_made === false) {
+    current_values.push(obj);
+  }
+  localStorage.setItem(keyword, JSON.stringify(current_values));
 }
 
 export function reformatQueryForSearch(query: string): string {
