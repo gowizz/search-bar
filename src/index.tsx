@@ -3,9 +3,9 @@ import './assets/searchbar.css';
 import React from 'react';
 
 import { goToGowiz } from './request';
-import { Results } from './components/result';
+import { addSearchTermToLocalStorage, removeSearchTermFromLocalStorage } from './util';
 import { Input } from './components/input';
-import { addSearchTermToLocalStorage } from './util';
+import { Results } from './components/result';
 
 export interface Options {
   query?: string;
@@ -15,7 +15,7 @@ export interface Options {
   showResultsSearchIcon?: boolean;
   useAutoComplete?: boolean;
   maxResults?: number;
-  searchSuggestions: string[];
+  searchSuggestions?: string[];
 }
 //TODO: add props autofocus. DO you want the input to use outofocus?
 //TODO: each search sugeestions should be no no longer than 150 chars
@@ -40,14 +40,14 @@ export class ToGowizSearchBar extends React.PureComponent<Options, SearchBarStat
       highlight_query: '',
       hasSearched: false,
     };
+
     this.handleOnSubmit = this.handleOnSubmit.bind(this);
     this.handleOnSelect = this.handleOnSelect.bind(this);
     this.handleOnChange = this.handleOnChange.bind(this);
     this.handleOnCancel = this.handleOnCancel.bind(this);
     this.handleOnKey = this.handleOnKey.bind(this);
-    this.handleSearchSuggestionRemove = this.handleSearchSuggestionRemove.bind(this);
 
-    //TODO: if aoutocomplete is off then we should remove every pass historic query from local storage
+    this.handleSearchSuggestionRemove = this.handleSearchSuggestionRemove.bind(this);
   }
 
   handleOnSubmit(event: any): void {
@@ -60,19 +60,21 @@ export class ToGowizSearchBar extends React.PureComponent<Options, SearchBarStat
     }
   }
   handleOnChange(event: any): void {
+    //TODO: we should only getch suggestions whn user has typed the search query or if it's the inital one. not fetching when clicking using arrows
     event.preventDefault();
-    //TODO: if auto complete is supported we should update the search sugestions
+    // TODO: fetch new auotocomeplete suggestions
+
     if (this.state.hasSearched === false) {
       if (this.state.useAutoComplete === true) {
         this.setState({ current_query: event.target.value, hasSearched: true });
       } else {
-        this.setState({ current_query: event.target.value, useAutoComplete: true, hasSearched: true });
+        this.setState({ current_query: event.target.value, hasSearched: true });
       }
     } else {
       if (this.state.useAutoComplete === true) {
         this.setState({ current_query: event.target.value });
       } else {
-        this.setState({ current_query: event.target.value, useAutoComplete: true });
+        this.setState({ current_query: event.target.value });
       }
     }
   }
@@ -102,7 +104,8 @@ export class ToGowizSearchBar extends React.PureComponent<Options, SearchBarStat
       const change = event.key === 'ArrowUp' ? -1 : 1;
 
       let current_nr = this.state.highlight_query_index + change;
-      current_nr = current_nr < -1 || current_nr > max_nr ? -1 : current_nr; // TODO: can this be a one liner
+      current_nr = current_nr < -1 || current_nr > max_nr ? -1 : current_nr;
+
       const next_query = current_nr === -1 ? this.props.query : this.state.results[current_nr];
 
       this.setState({
@@ -116,10 +119,12 @@ export class ToGowizSearchBar extends React.PureComponent<Options, SearchBarStat
       }
     }
   }
-  handleSearchSuggestionRemove(event) {
-    event.preventDefault();
-    let query = event.target.textContent;
-    alert(query);
+  handleSearchSuggestionRemove(str: string) {
+    removeSearchTermFromLocalStorage(str);
+  }
+
+  componentDidUpdate(prevProps: Readonly<Options>, prevState: Readonly<SearchBarState>, snapshot?: any): void {
+    console.count('Index');
   }
 
   componentDidMount() {
@@ -130,8 +135,7 @@ export class ToGowizSearchBar extends React.PureComponent<Options, SearchBarStat
   }
 
   //TODO: gary backround can only be present on a single element. if mouse is on an element the it's highlighted
-  //TODO: implemented should compoennts update
-  //TODO: implementes should component update
+  //TODO: implement should compoennts update
   //TODO: handle click outside of the searchbar are
 
   render() {
