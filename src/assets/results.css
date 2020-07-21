@@ -1,0 +1,98 @@
+.input_to_results {
+  border-top-color: lightgray;
+  border-top-style: solid;
+  border-top-width: 1px;
+  margin: 1px 12px 0;
+  padding-bottom: 4px;
+}
+
+.gowiz_searchbar_results ul {
+  list-style-type: none;
+  margin: 1px 1px 0;
+  padding: 0 0 16px 0;
+}
+
+.gowiz_searchbar_results li {
+  display: flex;
+  align-items: center;
+  padding: 4px 0 4px 0;
+}
+
+.highlight_search_suggestion,
+.gowiz_searchbar_results li:hover {
+  background-color: #eee;
+  cursor: default;
+}
+
+.gowiz_searchbar_results {
+  margin-left: 13px;
+}
+
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.result_icon {
+  fill: grey;
+  padding-right: 8px;
+}
+
+.remove_icon {
+  height: 18px;
+  width: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 0 0 0;
+  padding-left: 16px;
+}
+
+.remove_icon svg {
+  width: 14px;
+  height: 14px;
+  fill: black;
+}
+
+@media (min-width: 1200px) {
+  .ellipsis {
+    width: 89%;
+  }
+}
+
+@media (min-width: 901px) and (max-width: 1024px) {
+  .ellipsis {
+    width: 89%;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 900px) {
+  .ellipsis {
+    width: 89%;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 768px) {
+  .ellipsis {
+    width: 89%;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 600px) {
+  .ellipsis {
+    width: 85%;
+  }
+}
+
+@media (min-width: 321px) and (max-width: 480px) {
+  .ellipsis {
+    width: 81%;
+  }
+}
+
+@media (max-width: 320px) {
+  .ellipsis {
+    width: 71%;
+  }
+}

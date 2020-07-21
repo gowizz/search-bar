@@ -1,0 +1,23 @@
+name: Searchbar linting
+on:
+  pull_request:
+    branches:
+      - 'master'
+
+jobs:
+  build:
+    name: Lint Code Base
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Lint Code Base
+        uses: docker://github/super-linter:v2.1.1
+        env:
+          VALIDATE_ALL_CODEBASE: true
+          VALIDATE_YAML: true
+          VALIDATE_MD: true
+          VALIDATE_TSX: true
+          VALIDATE_TS: true
+          VALIDATE_JAVASCRIPT_ES: true
+          VALIDATE_CSS: true

@@ -1,0 +1,88 @@
+.gowiz_searchbar_container {
+  position: relative;
+  min-height: 40px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #dfe1e5;
+  border-radius: 24px;
+  background-color: white;
+  color: #212121;
+  font-size: 16px;
+  z-index: 1;
+  height: auto;
+}
+
+.gowiz_searchbar_container:hover {
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+.gowiz_searchbar_container:active {
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+.gowiz_searchbar_container:focus-within {
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+@media (min-width: 1200px) {
+  .gowiz_searchbar_container {
+    width: 61%;
+    margin-right: auto;
+    margin-left: auto;
+    justify-content: center;
+  }
+}
+
+@media (min-width: 901px) and (max-width: 1024px) {
+  .gowiz_searchbar_container {
+    width: 71%;
+    margin-right: auto;
+    margin-left: auto;
+    justify-content: center;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 900px) {
+  .gowiz_searchbar_container {
+    width: 81%;
+    margin-right: auto;
+    margin-left: auto;
+    justify-content: center;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 768px) {
+  .gowiz_searchbar_container {
+    width: 95%;
+    margin-right: auto;
+    margin-left: auto;
+    justify-content: center;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 600px) {
+  .gowiz_searchbar_container {
+    width: 97%;
+    margin-right: auto;
+    margin-left: auto;
+    justify-content: center;
+  }
+}
+
+@media (min-width: 321px) and (max-width: 480px) {
+  .gowiz_searchbar_container {
+    width: 96%;
+    margin-right: auto;
+    margin-left: auto;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 320px) {
+  .gowiz_searchbar_container {
+    width: 95%;
+    margin-right: auto;
+    margin-left: auto;
+    justify-content: center;
+  }
+}
