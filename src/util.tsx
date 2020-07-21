@@ -21,7 +21,7 @@ export function getSearchTermsInLocalStorage(): string[] {
   });
 
   items.sort(function (first, second) {
-    return JSON.parse(second[1]).timestamp-JSON.parse(first[1]).timestamp;
+    return JSON.parse(second[1]).timestamp - JSON.parse(first[1]).timestamp;
   });
 
   let search_terms = [];
@@ -42,7 +42,7 @@ export function removeSearchTermFromLocalStorage(name: string): void {
 
 export function addSearchTermToLocalStorage(name: string): void {
   const keyword = 'gowiz_search_suggestion_' + name;
-  const expiry_timestamp = new Date(new Date().getTime() + performance.now()+ 2592000000).getTime(); // + 30 days
+  const expiry_timestamp = new Date(new Date().getTime() + performance.now() + 2592000000).getTime(); // + 30 days
   const object = { timestamp: expiry_timestamp };
   localStorage.setItem(keyword, JSON.stringify(object));
 }
