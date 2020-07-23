@@ -14,7 +14,7 @@
     "prepare": "npm dedupe"
   },
   "repository": "https://github.com/gowizz/SearchBar",
-  "readme": "https://github.com/gowizz/SearchBar/blob/master/README.md",
+  "readme": "https://github.com/gowizz/SearchBar/blob/master/Readme.md",
   "license": "UNLICENSED",
   "author": "Karl-Gustav Kallasmaa <karl.gustav1789@gmail.com> (https://github.com/KGKallasmaa)",
   "keywords": [
