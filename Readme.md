@@ -1,7 +1,6 @@
 # Gowiz searchbar ![GitHub license](https://img.shields.io/badge/license-UNLICENSED-blue.svg)[![Actions Status](https://github.com/gowizz/SearchBar/workflows/Searchbar%20CI/badge.svg)](https://github.com/gowizz/SearchBar/actions)[![GitHub issues](https://img.shields.io/github/issues/gowizz/Searchbar.svg)](https://github.com/gowizz/SearchBar/issues/)[![npm version](https://badge.fury.io/js/%40gowiz%2Fsearchbar.svg)](https://badge.fury.io/js/%40gowiz%2Fsearchbar)
 
-Gowiz search bars are highly customisable powerful components that can enhance your page experience and that respect
-your site users privacy.
+Gowiz search bars are highly customisable powerful components that can enhance your page experience and that respect the privacy of your users.
 
 ## Getting started
 
@@ -13,15 +12,15 @@ After that the following components will be available
 
 ```javascript
 // CommonJS
-const { ToGowizSearchBar, GowizSearchBar } = require('@gowiz/searchbar');
+const { Searchbox, GowizSearchBar } = require('@gowiz/searchbar');
 
 // ES6
-import { ToGowizSearchBar, GowizSearchBar } from '@gowiz/searchbar';
+import { Searchbox, GowizSearchBar } from '@gowiz/searchbar';
 ```
 
 ## Components
 
-### To Gowiz search bar
+### Search box
 
 This component allows you to create a fully functional search bar that forwards the query to the Gowiz search engine.
 By default this component does not require any properties and it renders as follows.
@@ -34,24 +33,24 @@ The search bar is highly customizable and the following properties can be set.
 | --------------------- | --------------------------------------------------------- | ------- | ----------------------- |
 | query                 | a query that will be set as the initial input value       |         | 0 < x < 2024 characters |
 | placeholder           | a placeholder that will be showed when input is empty     |         | 0 < x < 150 characters  |
-| useCaching            | specify if typed searches should be used in the cache     | true    |                         |
-| showInputSearchIcon   | specify if the search icon is displaced next to the input | true    |                         |
-| showResultsSearchIcon | specify if search icon is displaced next to suggestions   | true    |                         |
+| useCaching            | specify if typed searches should be saved in the cache    | true    |                         |
+| showInputSearchIcon   | specify if the search icon is displayed next to the input | true    |                         |
+| showResultsSearchIcon | specify if search icon is displayed next to suggestions   | true    |                         |
 | useAutoComplete       | specify if Gowiz autocomplete is used                     | true    |                         |
 | useAutoFocus          | specify if the search bar is focused                      | false   |                         |
 | maxResults            | number of search suggestions that will be shown           | 10      | 0 < x < 25              |
-| searchSuggestions     | pre defined search suggestions                            | []      | 0 < x < 25 suggestions  |
-| searchDomains         | pre defined domains the results are restricted to         | []      | 0 < x < domains         |
+| searchSuggestions     | predefined search suggestions                             | []      | 0 < x < 25 suggestions  |
+| searchDomains         | predefined domains the results are restricted to          | []      | 0 < x < domains         |
 
 #### Auto complete
 
 The search bar has an autocomplete functionality that attempts to predict the next query.
 
 ```javascript
-import { ToGowizSearchBar } from '@gowiz/searchbar';
+import { Searchbox } from '@gowiz/searchbar';
 
-const search_bar = (
-  <ToGowizSearchBar
+const search_box = (
+  <Searchbox
     query={'mars'}
     searchSuggestions={[
       'mars',
@@ -84,6 +83,6 @@ Actions allow the user to perform certain actions faster by utilizing the keyboa
 | Esc           | Closes the suggestions list                                                |
 | Up/Down arrow | Changes the current query by selecting the previous/next search suggestion |
 
-### Gowiz search bar
+### Search bar
 
 This component is accessible, but it has no legit functionality.
