@@ -41,6 +41,7 @@ export function getSearchTermsInLocalStorage(): string[] {
   }
   return search_terms;
 }
+
 export function removeSearchTermFromLocalStorage(name: string): void {
   const keyword = 'gowiz_search_suggestion';
   let current_values = JSON.parse(localStorage.getItem(keyword));
@@ -88,51 +89,4 @@ export function addSearchTermToLocalStorage(name: string): void {
     current_values.push(obj);
   }
   localStorage.setItem(keyword, JSON.stringify(current_values));
-}
-
-export function reformatQueryForSearch(query: string): string {
-  query = query.trim();
-  return query;
-}
-/*
-export function reformatQueryForSearch(query: string): string {
-  query = query.trim();
-
-  if (query.length > 128) {
-    query = query.substring(0, 128);
-  }
-
-  const nr_of_words_in_query = query
-    .trim()
-    .split(' ')
-    .filter(function (n) {
-      return n !== '';
-    }).length;
-  if (nr_of_words_in_query > 50) {
-    query = query.split(' ').splice(0, 50).join(' ');
-  }
-
-  query = query.replace('%20', '');
-  return query;
-}
-
- */
-
-export function getHighlightParts(text: string, query: string): string[] {
-  if (text === undefined || query === undefined) {
-    return [];
-  }
-  if (text.length < 1 || query.length < 1) {
-    return [];
-  }
-  text = reformatQueryForSearch(text);
-  query = reformatQueryForSearch(query);
-
-  if (text.toLocaleLowerCase() === query.toLocaleLowerCase()) {
-    return [];
-  }
-  const parts = text.split(new RegExp(`(${query})`, 'gi'));
-  return parts.filter(function (e) {
-    return e;
-  });
 }

@@ -1,44 +1,60 @@
+import React, { FunctionComponent } from 'react';
+import { CancelIcon, SearchIcon } from '../assets/icons';
+import shallowCompare from 'react-addons-shallow-compare';
 import '../assets/input.css';
 
-import React, { Component, FunctionComponent } from 'react';
-import { CancelIcon, SearchIcon } from '../assets/icons';
-
 interface InputProps {
-  query: string;
-  placeholder: string;
+  query?: string;
+  placeholder?: string;
   onChange: (e: any) => void;
   onCancel: (e: any) => void;
   showInputSearchIcon?: boolean;
+  useAutoFocus?: boolean;
 }
 
-// TODO: use props autofocus
-
-export class Input extends Component<InputProps> {
-  componentDidUpdate(prevProps: Readonly<InputProps>, prevState: Readonly<{}>, snapshot?: any): void {
-    console.count('Input');
+const SearchIconClass: FunctionComponent<{ showInputSearchIcon: boolean }> = ({ showInputSearchIcon }) => {
+  if (showInputSearchIcon) {
+    return <div className="search_icon">{showInputSearchIcon && <SearchIcon />}</div>;
   }
+  return null;
+};
+
+const CancelIconClass: FunctionComponent<{ query: string; onCancel: (e: any) => void }> = ({ query, onCancel }) => {
+  const cancel_button_is_needed = query != undefined && query.length > 0;
+  if (cancel_button_is_needed) {
+    return (
+      <div className="cancel_icon" title={'Clear'} onClick={onCancel}>
+        {query != undefined && query.length > 0 && <CancelIcon />}
+      </div>
+    );
+  }
+  return null;
+};
+
+export default class Input extends React.Component<InputProps> {
   shouldComponentUpdate(nextProps: Readonly<InputProps>, nextState: Readonly<{}>, nextContext: any): boolean {
     if (this.props.query != nextProps.query) {
       return true;
     }
-    console.log('Current props');
-    console.log(this.props);
-    console.log('next props');
-    console.log(nextProps);
-
-    return false;
+    return shallowCompare(this, nextProps, nextState);
   }
 
   render() {
-    let { query, placeholder, showInputSearchIcon, onChange, onCancel } = this.props;
-    //TODO: add prios for title,aria_label
+    const {
+      query = '',
+      placeholder = 'Search on Gowiz',
+      showInputSearchIcon = true,
+      onChange,
+      onCancel,
+      useAutoFocus = true,
+    } = this.props;
 
     return (
       <>
-        <div className="search_icon">{showInputSearchIcon && <SearchIcon />}</div>
+        <SearchIconClass showInputSearchIcon={showInputSearchIcon} />
         <div className="search_input">
           <input
-            spellCheck={false}
+            spellCheck={true}
             value={query}
             placeholder={placeholder}
             onChange={onChange}
@@ -48,15 +64,13 @@ export class Input extends Component<InputProps> {
             title="Search with Gowiz"
             aria-required="true"
             aria-label="Search query input"
+            autoFocus={useAutoFocus}
           />
         </div>
-        <div className="cancel_icon" title={'Clear'} onClick={onCancel}>
-          {query != undefined && query.length > 0 && <CancelIcon />}
-        </div>
+        <CancelIconClass query={query} onCancel={onCancel} />
       </>
     );
   }
 }
 
 //TODO: add testing
-//TODO: previously search values should be deleted from localstorage

@@ -1,8 +1,10 @@
 import '../assets/results.css';
 
-import React, { Component, FunctionComponent } from 'react';
-import { getHighlightParts, getSearchTermsInLocalStorage, searchTermInLocalStorage } from '../util';
+import React, { FunctionComponent } from 'react';
 import { CancelIcon, SearchIcon, TimeIcon } from '../assets/icons';
+import shallowCompare from 'react-addons-shallow-compare';
+import { getSearchTermsInLocalStorage, searchTermInLocalStorage } from '../util/local_storage';
+import { getHighlightParts } from '../util/highlight';
 
 interface ResultsProps {
   query: string;
@@ -41,30 +43,34 @@ const Highlight: FunctionComponent<{ text: string; query: string }> = ({ text, q
     </span>
   );
 };
+const RemoveIconClass: FunctionComponent<{ result: string; onRemove: (str: string) => void }> = ({
+  result,
+  onRemove,
+}) => {
+  const _searchTermInLocalStorage = searchTermInLocalStorage(result);
+  if (_searchTermInLocalStorage) {
+    return (
+      <div className="remove_icon" title={'Remove ' + result + 'from search history'} onClick={() => onRemove(result)}>
+        {searchTermInLocalStorage(result) && <CancelIcon />}
+      </div>
+    );
+  }
+  return <div className="remove_icon" />;
+};
 
-export class Results extends Component<ResultsProps> {
+export default class Results extends React.Component<ResultsProps> {
   shouldComponentUpdate(nextProps: Readonly<ResultsProps>, nextState: Readonly<{}>, nextContext: any): boolean {
-    const next_results = nextProps.results;
-    const this_results = this.props.results;
-
-    if (next_results == this_results) {
+    if (nextProps.results == this.props.results) {
       if (this.props.query != nextProps.query) {
         return nextProps.query == '';
       }
       return false;
     }
-    console.log(nextProps.results);
-    console.log(this.props.results);
-
-    //    console.log("Current props");
-    //   console.log(this.props);
-    //  console.log("next props");
-    // console.log(nextProps);
-    return true;
+    return shallowCompare(this, nextProps, nextState);
   }
 
-  componentDidUpdate(prevProps: Readonly<ResultsProps>, prevState: Readonly<{}>, snapshot?: any): void {
-    console.count('Results updates');
+  forceUpdateMe() {
+    this.forceUpdate();
   }
 
   render() {
@@ -76,10 +82,14 @@ export class Results extends Component<ResultsProps> {
         my_results = getSearchTermsInLocalStorage();
       }
       if (my_results == null || my_results.length < 1) {
-        return <div />;
+        return null;
       }
     }
 
+    const index = my_results.indexOf(query);
+    if (index > -1) {
+      my_results.splice(index, 1);
+    }
     const props = {
       query: query,
       onSelect: onSelect,
@@ -103,16 +113,10 @@ export class Results extends Component<ResultsProps> {
               value={result}
             >
               <InLocalStorage props={props} result={result} />
-              <div className="ellipsis" title={result} onSelect={onSelect}>
+              <div className="ellipsis" title={'Search for ' + result} onSelect={onSelect}>
                 <Highlight query={props.query} text={result} />
               </div>
-              <div
-                className="remove_icon"
-                title={'Remove ' + result + 'from search history'}
-                onClick={() => onRemove(result)}
-              >
-                {searchTermInLocalStorage(result) && <CancelIcon />}
-              </div>
+              <RemoveIconClass result={result} onRemove={onRemove} />
             </li>
           ))}
         </ul>
@@ -120,7 +124,6 @@ export class Results extends Component<ResultsProps> {
     );
   }
 }
-
+//TODO: imeplemnt translations
 //TODO: add testing
-//TODO: previously search values should be deleted from localstorage
 //TODO: bug (highlighting should not change when we navigate with arrows)
