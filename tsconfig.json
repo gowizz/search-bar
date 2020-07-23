@@ -1,14 +1,19 @@
 {
   "compilerOptions": {
     "outDir": "./lib",
-    "allowJs": true,
+    "allowJs": false,
     "module": "commonjs",
     "target": "es5",
     "lib": ["es2015", "es2017", "dom"],
     "declaration": true,
     "jsx": "react",
     "esModuleInterop": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "pretty": true,
+    "alwaysStrict": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "diagnostics": true
   },
   "include": ["./src/**/*"],
   "exclude": ["node_modules"]

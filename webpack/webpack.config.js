@@ -1,13 +1,17 @@
+
 const libraryName = 'gowizSearchbar';
 const { merge } = require('webpack-merge');
 
 
+
+
 const baseConfig = {
-  entry: './src/index.tsx',
-  devtool: 'inline-source-map',
+  entry: {
+    app: './src/index.tsx'
+  },
   resolve: {
     extensions: ['.ts', '.tsx', '.js']
-  },
+  }
 };
 
 const umdConfig = merge(baseConfig, {
@@ -33,6 +37,8 @@ const umdConfig = merge(baseConfig, {
     ]
   }
 });
+
+
 
 const npmConfig = merge(baseConfig, {
   output: {
