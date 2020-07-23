@@ -30,7 +30,7 @@ interface SearchBarState {
   hasSearched: boolean;
 }
 
-export class ToGowizSearchBar extends React.Component<Options, SearchBarState> {
+export class Searchbox extends React.Component<Options, SearchBarState> {
   private readonly result_ref: React.RefObject<Results>;
 
   constructor(props: Options) {
@@ -200,7 +200,7 @@ export class ToGowizSearchBar extends React.Component<Options, SearchBarState> {
   }
 }
 
-export class GowizSearchBar extends React.Component<Options, SearchBarState> {
+export class SearchBar extends React.Component<Options, SearchBarState> {
   render() {
     return <h1>The implementation of this component is not yet complete</h1>;
   }
