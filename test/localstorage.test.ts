@@ -1,4 +1,4 @@
-import * as locs from '../src/util/localstorage';
+import * as locs from '../src/util/local_storage';
 
 beforeEach(() => {
   localStorage.clear();
