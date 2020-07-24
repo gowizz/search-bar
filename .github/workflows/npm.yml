@@ -9,15 +9,15 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '14.x'
-          registry-url: 'https://registry.npmjs.org'
-      - run: npm install
+          registry-url: "https://registry.npmjs.org"
+      - run: npm ci
+      - run: npm build
       - run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
       - uses: actions/setup-node@v1
         with:
           registry-url: 'https://npm.pkg.github.com'
-          scope: '@gowizz'
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
