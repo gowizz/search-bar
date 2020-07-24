@@ -1,6 +1,6 @@
 {
   "name": "@gowiz/searchbar",
-  "version": "0.0.1",
+  "version": "0.0.10",
   "description": "Different search bars powered by Gowiz search engine technology",
   "main": "lib/gowizSearchbar.js",
   "types": "lib/index.d.ts",
@@ -13,7 +13,10 @@
     "format": "prettier --write \"**/*.+(json|md|ts|tsx)\"",
     "prepare": "npm dedupe"
   },
-  "repository": "https://github.com/gowizz/SearchBar",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gowizz/SearchBar.git"
+  },
   "readme": "https://github.com/gowizz/SearchBar/blob/master/README.md",
   "license": "UNLICENSED",
   "author": "Karl-Gustav Kallasmaa <karl.gustav1789@gmail.com> (https://github.com/KGKallasmaa)",
@@ -60,5 +63,11 @@
   "peerDependencies": {
     "react": ">=16.0.0",
     "react-dom": ">=16.0.0"
+  },
+  "files": [
+    "dist/**/*"
+  ],
+  "bugs": {
+    "url": "https://github.com/gowizz/SearchBar/issues"
   }
 }
