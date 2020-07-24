@@ -57,7 +57,7 @@ export default class Input extends React.Component<InputProps> {
             spellCheck={true}
             value={query}
             placeholder={placeholder}
-            onChange={onChange}
+            onChange={(e) => onChange(e)}
             autoComplete="off"
             name="query"
             type="text"
@@ -67,7 +67,7 @@ export default class Input extends React.Component<InputProps> {
             autoFocus={useAutoFocus}
           />
         </div>
-        <CancelIconClass query={query} onCancel={onCancel} />
+        <CancelIconClass query={query} onCancel={(e) => onCancel(e)} />
       </>
     );
   }

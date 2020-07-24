@@ -3,7 +3,7 @@ import '../assets/results.css';
 import React, { FunctionComponent } from 'react';
 import { CancelIcon, SearchIcon, TimeIcon } from '../assets/icons';
 import shallowCompare from 'react-addons-shallow-compare';
-import { getSearchTermsInLocalStorage, searchTermInLocalStorage } from '../util/local_storage';
+import { getSearchTermsInLocalStorage, searchTermInLocalStorage } from '../util/storage';
 import { getHighlightParts } from '../util/highlight';
 
 interface ResultsProps {
@@ -109,14 +109,13 @@ export default class Results extends React.Component<ResultsProps> {
             <li
               className={props.query == result ? 'highlight_search_suggestion' : 'search_suggestion'}
               key={result}
-              onClick={onSelect}
-              value={result}
+              onClick={(e) => onSelect(e)}
             >
               <InLocalStorage props={props} result={result} />
-              <div className="ellipsis" title={'Search for ' + result} onSelect={onSelect}>
+              <div className="ellipsis" title={'Search for ' + result}>
                 <Highlight query={props.query} text={result} />
               </div>
-              <RemoveIconClass result={result} onRemove={onRemove} />
+              <RemoveIconClass result={result} onRemove={(e) => onRemove(e)} />
             </li>
           ))}
         </ul>
