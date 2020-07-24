@@ -1,6 +1,6 @@
 {
   "name": "@gowiz/searchbar",
-  "version": "0.0.2",
+  "version": "0.0.3-0",
   "description": "Different search bars powered by Gowiz search engine technology",
   "main": "lib/gowizSearchbar.js",
   "types": "lib/index.d.ts",
