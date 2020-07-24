@@ -6,15 +6,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Node
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
           node-version: '14.x'
           registry-url: 'https://registry.npmjs.org'
-      - name: Installing the package
       - run: npm install
-      - name: Publishing to NPM
       - run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
@@ -22,7 +19,6 @@ jobs:
         with:
           registry-url: 'https://npm.pkg.github.com'
           scope: '@gowizz'
-      - name: Publishing to Github packages
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
