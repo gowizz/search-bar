@@ -4,9 +4,10 @@ import React from 'react';
 
 import Results from './components/result';
 import Input from './components/input';
-import { addSearchTermToLocalStorage, removeSearchTermFromLocalStorage } from './util/local_storage';
+import { addSearchTermToLocalStorage, removeSearchTermFromLocalStorage } from './util/storage';
 import { goToGowiz } from './util/request';
 import { index_has_valid_props } from './util/component_validation';
+import { HiddenInput } from './components/hidden_input';
 
 export interface Options {
   query?: string;
@@ -58,11 +59,16 @@ export class Searchbox extends React.Component<Options, SearchBarState> {
 
   handleOnSubmit(event: any): void {
     event.preventDefault();
-    let query = this.state.current_query;
-    if (query != null && query.length > 0) {
-      this.setState({ current_query: query });
+
+    const inputs = document.getElementById('gowiz_searchbox_form');
+    const query = inputs['query']['value'];
+    const token = inputs['token']['value'];
+
+    const should_send_request = query != null && query.length > 0 && token != null;
+
+    if (should_send_request) {
       addSearchTermToLocalStorage(query);
-      goToGowiz(query, this.props.searchDomains);
+      goToGowiz(query, token, this.props.searchDomains);
     }
   }
   handleOnChange(event: any): void {
@@ -92,15 +98,17 @@ export class Searchbox extends React.Component<Options, SearchBarState> {
   }
 
   handleOnSelect(event: any) {
-    event.preventDefault();
-    let query = event.target.textContent;
+    const inputs = document.getElementById('gowiz_searchbox_form');
 
-    const query_is_not_empty = query != null && query.length > 0;
+    const token = inputs['token']['value'];
+    const query = event.target.textContent;
 
-    if (query_is_not_empty) {
+    const should_send_request = query != null && query.length > 0 && token != null;
+
+    if (should_send_request) {
       this.setState({ current_query: query });
       addSearchTermToLocalStorage(query);
-      goToGowiz(query, this.props.searchDomains);
+      goToGowiz(query, token, this.props.searchDomains);
     }
   }
 
@@ -168,7 +176,7 @@ export class Searchbox extends React.Component<Options, SearchBarState> {
 
     return (
       <div className="gowiz_searchbar_container">
-        <form onSubmit={this.handleOnSubmit}>
+        <form onSubmit={(e) => this.handleOnSubmit(e)} id={'gowiz_searchbox_form'}>
           <div className="gowiz_searchbar_input">
             <Input
               query={current_query}
@@ -194,6 +202,7 @@ export class Searchbox extends React.Component<Options, SearchBarState> {
               />
             </div>
           )}
+          <HiddenInput />
         </form>
       </div>
     );
