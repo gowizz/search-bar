@@ -118,7 +118,7 @@ export class Searchbox extends React.Component<Options, SearchBarState> {
   handleOnKey(event) {
     if (['Enter'].includes(event.key)) {
       event.preventDefault();
-      console.log(event.target.id);
+
       if (event.target.id == 'cancel_icon') {
         this.handleOnCancel(event);
       } else if (event.target.id == 'remove_icon') {
