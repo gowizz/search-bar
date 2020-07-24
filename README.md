@@ -76,12 +76,12 @@ The characters that the users would want to type next are set to bold
 
 Actions allow the user to perform certain actions faster by utilizing the keyboard.
 
-| Key           | Action                                                                     |
-| ------------- | -------------------------------------------------------------------------- |
-| Enter         | Triggers the search with the current input query                           |
-| Tab           | Closes the suggestions list                                                |
-| Esc           | Closes the suggestions list                                                |
-| Up/Down arrow | Changes the current query by selecting the previous/next search suggestion |
+| Key           | Action                                                                          |
+| ------------- | ------------------------------------------------------------------------------- |
+| Enter         | Triggers the search with the current input query                                |
+| Tab           | Navigate through search results, clear search field, remove search from history |
+| Esc           | Closes the suggestions list                                                     |
+| Up/Down arrow | Changes the current query by selecting the previous/next search suggestion      |
 
 ### Search bar
 

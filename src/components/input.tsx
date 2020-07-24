@@ -14,7 +14,11 @@ interface InputProps {
 
 const SearchIconClass: FunctionComponent<{ showInputSearchIcon: boolean }> = ({ showInputSearchIcon }) => {
   if (showInputSearchIcon) {
-    return <div className="search_icon">{showInputSearchIcon && <SearchIcon />}</div>;
+    return (
+      <div className="search_icon">
+        <SearchIcon />
+      </div>
+    );
   }
   return null;
 };
@@ -23,8 +27,8 @@ const CancelIconClass: FunctionComponent<{ query: string; onCancel: (e: any) => 
   const cancel_button_is_needed = query != undefined && query.length > 0;
   if (cancel_button_is_needed) {
     return (
-      <div className="cancel_icon" title={'Clear'} onClick={onCancel}>
-        {query != undefined && query.length > 0 && <CancelIcon />}
+      <div id={'cancel_icon'} tabIndex={2} className="cancel_icon" title={'Clear'} onClick={onCancel}>
+        <CancelIcon />
       </div>
     );
   }
@@ -61,10 +65,11 @@ export default class Input extends React.Component<InputProps> {
             autoComplete="off"
             name="query"
             type="text"
-            title="Search with Gowiz"
+            title={query.length != null && query.length > 0 ? 'Search ' + query + ' on Gowiz' : 'Search on Gowiz'}
             aria-required="true"
             aria-label="Search query input"
             autoFocus={useAutoFocus}
+            tabIndex={1}
           />
         </div>
         <CancelIconClass query={query} onCancel={(e) => onCancel(e)} />

@@ -43,15 +43,24 @@ const Highlight: FunctionComponent<{ text: string; query: string }> = ({ text, q
     </span>
   );
 };
-const RemoveIconClass: FunctionComponent<{ result: string; onRemove: (str: string) => void }> = ({
-  result,
-  onRemove,
-}) => {
+const RemoveIconClass: FunctionComponent<{
+  tabIndexStart: number;
+  result: string;
+  onRemove: (str: string) => void;
+}> = ({ tabIndexStart, result, onRemove }) => {
   const _searchTermInLocalStorage = searchTermInLocalStorage(result);
   if (_searchTermInLocalStorage) {
     return (
-      <div className="remove_icon" title={'Remove ' + result + 'from search history'} onClick={() => onRemove(result)}>
-        {searchTermInLocalStorage(result) && <CancelIcon />}
+      <div
+        tabIndex={tabIndexStart + 1}
+        className="remove_icon"
+        id={'remove_icon'}
+        defaultValue={result}
+        aria-readonly={'true'}
+        title={'Remove ' + result + ' from search history'}
+        onClick={() => onRemove(result)}
+      >
+        <CancelIcon />
       </div>
     );
   }
@@ -105,17 +114,20 @@ export default class Results extends React.Component<ResultsProps> {
       <>
         <div className="input_to_results" />
         <ul>
-          {my_results.slice(0, maxResults).map((result) => (
+          {my_results.slice(0, maxResults).map((result, index) => (
             <li
-              className={props.query == result ? 'highlight_search_suggestion' : 'search_suggestion'}
+              className={props.query === result ? 'highlight_search_suggestion' : 'search_suggestion'}
               key={result}
+              tabIndex={2 + index}
               onClick={(e) => onSelect(e)}
+              onSelect={() => onSelect(result)}
             >
+              <p>{props.query === result ? 'janes' : 'porgand'}</p>
               <InLocalStorage props={props} result={result} />
-              <div className="ellipsis" title={'Search for ' + result}>
+              <div className="ellipsis" title={'Search for ' + result + ' on Gowiz'}>
                 <Highlight query={props.query} text={result} />
               </div>
-              <RemoveIconClass result={result} onRemove={(e) => onRemove(e)} />
+              <RemoveIconClass tabIndexStart={2 + index} result={result} onRemove={(e) => onRemove(e)} />
             </li>
           ))}
         </ul>

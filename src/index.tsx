@@ -52,6 +52,7 @@ export class Searchbox extends React.Component<Options, SearchBarState> {
     this.handleOnChange = this.handleOnChange.bind(this);
     this.handleOnCancel = this.handleOnCancel.bind(this);
     this.handleOnKey = this.handleOnKey.bind(this);
+
     this.handleSearchSuggestionRemove = this.handleSearchSuggestionRemove.bind(this);
 
     this.result_ref = React.createRef();
@@ -71,6 +72,7 @@ export class Searchbox extends React.Component<Options, SearchBarState> {
       goToGowiz(query, token, this.props.searchDomains);
     }
   }
+
   handleOnChange(event: any): void {
     event.preventDefault();
 
@@ -92,6 +94,7 @@ export class Searchbox extends React.Component<Options, SearchBarState> {
       this.setState({ current_query: event.target.value });
     }
   }
+
   handleOnCancel(event: any): void {
     event.preventDefault();
     this.setState({ current_query: '', useAutoComplete: false });
@@ -115,7 +118,16 @@ export class Searchbox extends React.Component<Options, SearchBarState> {
   handleOnKey(event) {
     if (['Enter'].includes(event.key)) {
       event.preventDefault();
-      this.handleOnSubmit(event);
+
+      if (event.target.id == 'cancel_icon') {
+        this.handleOnCancel(event);
+      } else if (event.target.id == 'remove_icon') {
+        const title = event.target.title; // TODO: change this if you introduce transaltions
+        const query = title.split(' ')[1];
+        this.handleSearchSuggestionRemove(query);
+      } else {
+        this.handleOnSubmit(event);
+      }
     } else if (['ArrowUp', 'ArrowDown'].includes(event.key)) {
       event.preventDefault();
 
@@ -133,8 +145,9 @@ export class Searchbox extends React.Component<Options, SearchBarState> {
           current_query: next_query,
         });
       }
-    } else if (['Escape', 'Tab'].includes(event.key)) {
+    } else if (['Escape'].includes(event.key)) {
       event.preventDefault();
+
       const should_trigger_state_change = this.state.results.length > 0;
       if (should_trigger_state_change) {
         if (this.state.useAutoComplete === true) {
@@ -152,6 +165,7 @@ export class Searchbox extends React.Component<Options, SearchBarState> {
   componentDidMount() {
     document.addEventListener('keydown', this.handleOnKey, false);
   }
+
   componentWillUnmount() {
     document.removeEventListener('keydown', this.handleOnKey, false);
   }
@@ -172,7 +186,7 @@ export class Searchbox extends React.Component<Options, SearchBarState> {
     } = this.props;
     const { results, current_query, hasSearched } = this.state;
 
-    const results_should_render = results != undefined && results.length > 0;
+    const results_should_render = results != undefined && results.length > 0 && hasSearched;
 
     return (
       <div className="gowiz_searchbar_container">
