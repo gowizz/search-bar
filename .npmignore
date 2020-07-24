@@ -9,3 +9,4 @@ webpack.config.js
 .prettierrc
 .stylelintrc.json
 tsconfig.json
+package-lock.json
