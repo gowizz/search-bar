@@ -3,3 +3,9 @@ src
 test
 node_modules
 webpack.config.js
+.idea
+.github
+.prettierignore
+.prettierrc
+.stylelintrc.json
+tsconfig.json
