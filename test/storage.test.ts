@@ -1,4 +1,4 @@
-import * as locs from '../src/util/local_storage';
+import * as locs from '../src/util/storage';
 
 beforeEach(() => {
   localStorage.clear();
@@ -107,5 +107,35 @@ describe('Localstorage', () => {
     localStorage.setItem('other_key', '');
     res = locs.getSearchTermsInLocalStorage();
     expect(res.length).toBe(0);
+  });
+  it('session token can be generated', () => {
+    let res = locs.generateInputSessionToken();
+    expect(res.length).toBe(36);
+    expect(locs.getInputSessionToken()).toBe(res);
+  });
+  it('session token can be retrieved', () => {
+    sessionStorage.clear();
+    let res = locs.getInputSessionToken();
+    expect(res).toBe(null);
+    locs.generateInputSessionToken();
+    res = locs.getInputSessionToken();
+    expect(res.length).toBe(36);
+    expect(locs.getInputSessionToken()).toBe(res);
+    expect(locs.getInputSessionToken('input_form_token')).toBe(res);
+  });
+  it('session token can be deleted', () => {
+    sessionStorage.clear();
+    let res = locs.getInputSessionToken();
+    expect(res).toBe(null);
+    locs.generateInputSessionToken();
+    res = locs.getInputSessionToken();
+    expect(res.length).toBe(36);
+    locs.removeInputSessionToken();
+    res = locs.getInputSessionToken();
+    expect(res).toBe(null);
+    locs.getInputSessionToken();
+    locs.removeInputSessionToken('input_form_token');
+    res = locs.getInputSessionToken();
+    expect(res).toBe(null);
   });
 });

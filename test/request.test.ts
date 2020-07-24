@@ -1,4 +1,5 @@
 import * as req from '../src/util/request';
+import * as locs from '../src/util/storage';
 
 describe('Request', () => {
   const { location } = window;
@@ -18,9 +19,10 @@ describe('Request', () => {
 
   it('no request with empty queries', () => {
     const queries = ['', ' '];
+    const token = locs.generateInputSessionToken();
     for (let i = 0; i < queries.length; i++) {
       jest.clearAllMocks();
-      req.goToGowiz(queries[i]);
+      req.goToGowiz(queries[i], token);
       expect(window.location.replace).toHaveBeenCalledTimes(0);
     }
   });
@@ -34,8 +36,9 @@ describe('Request', () => {
     ];
 
     for (let i = 0; i < queries.length; i++) {
+      const token = locs.generateInputSessionToken();
       jest.clearAllMocks();
-      req.goToGowiz(queries[i]);
+      req.goToGowiz(queries[i], token);
       expect(window.location.replace).toHaveBeenCalledTimes(1);
       expect(window.location.replace).toHaveBeenCalledWith(responses[i]);
     }
@@ -49,8 +52,9 @@ describe('Request', () => {
     ];
 
     for (let i = 0; i < queries.length; i++) {
+      const token = locs.generateInputSessionToken();
       jest.clearAllMocks();
-      req.goToGowiz(queries[i]);
+      req.goToGowiz(queries[i], token);
       expect(window.location.replace).toHaveBeenCalledTimes(1);
       expect(window.location.replace).toHaveBeenCalledWith(responses[i]);
     }
@@ -65,8 +69,9 @@ describe('Request', () => {
     ];
 
     for (let i = 0; i < queries.length; i++) {
+      const token = locs.generateInputSessionToken();
       jest.clearAllMocks();
-      req.goToGowiz(queries[i], pre_domains[i]);
+      req.goToGowiz(queries[i], token, pre_domains[i]);
       expect(window.location.replace).toHaveBeenCalledTimes(1);
       expect(window.location.replace).toHaveBeenCalledWith(responses[i]);
     }
@@ -87,10 +92,12 @@ describe('Request', () => {
       'test site:http:example.com': 'https://gowiz.eu/search/test',
       'a message site:example.com from me': 'https://gowiz.eu/search/a%20message%20from%20me%20site%3Aexample.com',
     };
+
     for (const query in dict) {
+      const token = locs.generateInputSessionToken();
       const response = dict[query];
       jest.clearAllMocks();
-      req.goToGowiz(query);
+      req.goToGowiz(query, token);
       expect(window.location.replace).toHaveBeenCalledTimes(1);
       expect(window.location.replace).toHaveBeenCalledWith(response);
     }
@@ -117,8 +124,9 @@ describe('Request', () => {
     ];
 
     for (let i = 0; i < queries.length; i++) {
+      const token = locs.generateInputSessionToken();
       jest.clearAllMocks();
-      req.goToGowiz(queries[i], pre_domains[i]);
+      req.goToGowiz(queries[i], token, pre_domains[i]);
       expect(window.location.replace).toHaveBeenCalledTimes(1);
       expect(window.location.replace).toHaveBeenCalledWith(responses[i]);
     }
@@ -445,8 +453,9 @@ describe('Request', () => {
     ];
 
     for (let i = 0; i < all_queries.length; i++) {
+      const token = locs.generateInputSessionToken();
       jest.clearAllMocks();
-      req.goToGowiz(all_queries[i].hello);
+      req.goToGowiz(all_queries[i].hello, token);
       expect(window.location.replace).toHaveBeenCalledTimes(1);
       expect(window.location.replace).toHaveBeenCalledWith(
         'https://gowiz.eu/search/' + encodeURIComponent(all_queries[i].hello)
@@ -457,7 +466,8 @@ describe('Request', () => {
   it('query is formatted before the call', () => {
     jest.clearAllMocks();
     const query = ' test ';
-    req.goToGowiz(query);
+    const token = locs.generateInputSessionToken();
+    req.goToGowiz(query, token);
     expect(window.location.replace).toHaveBeenCalledTimes(1);
     expect(window.location.replace).toHaveBeenCalledWith('https://gowiz.eu/search/test');
   });
@@ -467,24 +477,27 @@ describe('Request', () => {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     const charactersLength = characters.length;
     const base_url = 'https://gowiz.eu/search/';
+    let token = locs.generateInputSessionToken();
     for (let i = 0; i < 2500; i++) {
       query += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
-    req.goToGowiz(query);
+    req.goToGowiz(query, token);
     expect(window.location.replace).toHaveBeenCalledTimes(0);
     /*                    */
     query = '';
+    token = locs.generateInputSessionToken();
     for (let i = 0; i < 2048 - base_url.length + 1; i++) {
       query += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
-    req.goToGowiz(query);
+    req.goToGowiz(query, token);
     expect(window.location.replace).toHaveBeenCalledTimes(0);
     /*                    */
     query = '';
+    token = locs.generateInputSessionToken();
     for (let i = 0; i < 2048 - base_url.length; i++) {
       query += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
-    req.goToGowiz(query);
+    req.goToGowiz(query, token);
     expect(window.location.replace).toHaveBeenCalledTimes(1);
   });
   it('special characters are escaped', () => {
@@ -499,9 +512,10 @@ describe('Request', () => {
     };
 
     for (const query in dict) {
+      const token = locs.generateInputSessionToken();
       const response = dict[query];
       jest.clearAllMocks();
-      req.goToGowiz(query);
+      req.goToGowiz(query, token);
       expect(window.location.replace).toHaveBeenCalledTimes(1);
       expect(window.location.replace).toHaveBeenCalledWith(response);
     }
@@ -520,9 +534,10 @@ describe('Request', () => {
     };
 
     for (const query in dict) {
+      const token = locs.generateInputSessionToken();
       const response = dict[query];
       jest.clearAllMocks();
-      req.goToGowiz(query);
+      req.goToGowiz(query, token);
       expect(window.location.replace).toHaveBeenCalledTimes(1);
       expect(window.location.replace).toHaveBeenCalledWith(response);
     }
