@@ -1,7 +1,14 @@
 import { domain_to_host, reformat_url, url_is_valid } from './string_util';
+import { getInputSessionToken, removeInputSessionToken } from './storage';
 
-export function goToGowiz(user_query: string, pre_defined_domains: string[] = []): void {
-  //TODO: we should validate if the restiricted ULRS are correct
+export function goToGowiz(user_query: string, token: string, pre_defined_domains: string[] = []): void {
+  const session_token_from_storage = getInputSessionToken();
+
+  if (session_token_from_storage != token) {
+    removeInputSessionToken();
+    return;
+  }
+  removeInputSessionToken();
 
   const max_url_length = 2048;
   const base_URL = 'https://gowiz.eu/search/';
@@ -12,6 +19,7 @@ export function goToGowiz(user_query: string, pre_defined_domains: string[] = []
   let all_domains = pre_defined_domains;
 
   query_components = query_components.filter(function (el) {
+    //TODO: we should only use site:
     //site: +1
     if (el === 'site:' || el === 'Site:') {
       return null;
