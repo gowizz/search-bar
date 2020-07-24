@@ -1,3 +1,5 @@
+import uuid from 'uuid';
+
 export function searchTermInLocalStorage(name: string): boolean {
   const keyword = 'gowiz_search_suggestion';
   if (keyword in localStorage) {
@@ -89,4 +91,17 @@ export function addSearchTermToLocalStorage(name: string): void {
     current_values.push(obj);
   }
   localStorage.setItem(keyword, JSON.stringify(current_values));
+}
+
+export function generateInputSessionToken(): string {
+  const key = 'input_form_token';
+  const token: string = uuid();
+  sessionStorage.setItem(key, token);
+  return token;
+}
+export function getInputSessionToken(key: string = 'input_form_token'): string {
+  return sessionStorage.getItem(key);
+}
+export function removeInputSessionToken(key: string = 'input_form_token'): void {
+  sessionStorage.removeItem(key);
 }
