@@ -1,6 +1,6 @@
 {
   "name": "@gowiz/searchbar",
-  "version": "0.0.4-0",
+  "version": "0.0.0",
   "description": "Different search bars powered by Gowiz search engine technology",
   "main": "lib/gowizSearchbar.js",
   "types": "lib/index.d.ts",
@@ -26,6 +26,15 @@
     "engine",
     "searchbar",
     "onsite"
+  ],
+  "bugs": {
+    "url": "https://github.com/gowizz/SearchBar/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "lib"
   ],
   "jest": {
     "roots": [
@@ -63,11 +72,5 @@
   "peerDependencies": {
     "react": ">=16.0.0",
     "react-dom": ">=16.0.0"
-  },
-  "bugs": {
-    "url": "https://github.com/gowizz/SearchBar/issues"
-  },
-  "publishConfig": {
-    "access": "public"
   }
 }
