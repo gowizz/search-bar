@@ -35,8 +35,13 @@
 }
 
 .result_icon {
-  fill: grey;
   padding-right: 8px;
+}
+
+.result_icon svg {
+  fill: grey;
+  height: 18px;
+  width: 18px;
 }
 
 .remove_icon {

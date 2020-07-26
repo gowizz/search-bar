@@ -1,4 +1,6 @@
 import './assets/search_bar.css';
+import './assets/input.css';
+import './assets/results.css';
 import shallowCompare from 'react-addons-shallow-compare';
 import React from 'react';
 
@@ -32,6 +34,7 @@ interface SearchBarState {
 }
 
 export class Searchbox extends React.Component<Options, SearchBarState> {
+  //TODO: move searchbox to the components folder for teasier testing
   private readonly result_ref: React.RefObject<Results>;
 
   constructor(props: Options) {
@@ -40,7 +43,10 @@ export class Searchbox extends React.Component<Options, SearchBarState> {
     super(props);
     this.state = {
       current_query: this.props.query ? this.props.query : '',
-      results: this.props.searchSuggestions,
+      results:
+        this.props.searchSuggestions != null && this.props.searchSuggestions.length > this.props.maxResults
+          ? this.props.searchSuggestions.slice(0, this.props.maxResults)
+          : this.props.searchSuggestions,
       useAutoComplete: this.props.useAutoComplete !== false,
       highlight_query_index: -1,
       highlight_query: '',
@@ -129,6 +135,7 @@ export class Searchbox extends React.Component<Options, SearchBarState> {
         this.handleOnSubmit(event);
       }
     } else if (['ArrowUp', 'ArrowDown'].includes(event.key)) {
+      //TODO: test: we should not update arrows if the user hasn't searched a thing
       event.preventDefault();
 
       if (this.state.results.length > 0) {
@@ -136,7 +143,7 @@ export class Searchbox extends React.Component<Options, SearchBarState> {
         const change = event.key === 'ArrowUp' ? -1 : 1;
 
         let current_nr = this.state.highlight_query_index + change;
-        current_nr = current_nr < -1 || current_nr > max_nr ? -1 : current_nr;
+        current_nr = current_nr <= -1 || current_nr >= max_nr ? -1 : current_nr;
 
         const next_query = current_nr === -1 ? this.props.query : this.state.results[current_nr];
 

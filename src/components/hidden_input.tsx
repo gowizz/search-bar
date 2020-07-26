@@ -5,9 +5,7 @@ export const HiddenInput: FunctionComponent<{}> = ({}) => {
   const token = generateInputSessionToken();
   return (
     <React.Fragment>
-      <input readOnly={true} hidden={true} name={'token'} value={token} />
+      <input data-testid={'token'} readOnly={true} hidden={true} name={'token'} value={token} />
     </React.Fragment>
   );
 };
-
-//TODO: add testing
