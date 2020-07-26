@@ -49,4 +49,4 @@ const CancelIcon = (props: IconProps) => (
   </svg>
 );
 
-export { SearchIcon, TimeIcon, CancelIcon };
+export { validate_icon_props, SearchIcon, TimeIcon, CancelIcon };
