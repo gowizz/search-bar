@@ -1,5 +1,3 @@
-import '../assets/results.css';
-
 import React, { FunctionComponent } from 'react';
 import { CancelIcon, SearchIcon, TimeIcon } from '../assets/icons';
 import shallowCompare from 'react-addons-shallow-compare';
@@ -69,11 +67,12 @@ const RemoveIconClass: FunctionComponent<{
 
 export default class Results extends React.Component<ResultsProps> {
   shouldComponentUpdate(nextProps: Readonly<ResultsProps>, nextState: Readonly<{}>, nextContext: any): boolean {
-    if (nextProps.results == this.props.results) {
-      if (this.props.query != nextProps.query) {
-        return nextProps.query == '';
-      }
-      return false;
+    if (this.props.query !== nextProps.query) {
+      return true;
+    } else if (nextProps.results != this.props.results) {
+      return true;
+    } else if (nextProps.query.length == 0) {
+      return true;
     }
     return shallowCompare(this, nextProps, nextState);
   }
@@ -114,15 +113,16 @@ export default class Results extends React.Component<ResultsProps> {
       <>
         <div className="input_to_results" />
         <ul>
-          {my_results.slice(0, maxResults).map((result, index) => (
+          {my_results.map((result, index) => (
             <li
-              className={props.query === result ? 'highlight_search_suggestion' : 'search_suggestion'}
+              className={
+                props.query.valueOf() === result.valueOf() ? 'highlight_search_suggestion' : 'search_suggestion'
+              }
               key={result}
               tabIndex={2 + index}
               onClick={(e) => onSelect(e)}
               onSelect={() => onSelect(result)}
             >
-              <p>{props.query === result ? 'janes' : 'porgand'}</p>
               <InLocalStorage props={props} result={result} />
               <div className="ellipsis" title={'Search for ' + result + ' on Gowiz'}>
                 <Highlight query={props.query} text={result} />
