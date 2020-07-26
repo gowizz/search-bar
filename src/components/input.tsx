@@ -1,7 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { CancelIcon, SearchIcon } from '../assets/icons';
 import shallowCompare from 'react-addons-shallow-compare';
-import '../assets/input.css';
 
 interface InputProps {
   query?: string;
@@ -12,7 +11,7 @@ interface InputProps {
   useAutoFocus?: boolean;
 }
 
-const SearchIconClass: FunctionComponent<{ showInputSearchIcon: boolean }> = ({ showInputSearchIcon }) => {
+export const SearchIconClass: FunctionComponent<{ showInputSearchIcon: boolean }> = ({ showInputSearchIcon }) => {
   if (showInputSearchIcon) {
     return (
       <div className="search_icon">
@@ -23,7 +22,10 @@ const SearchIconClass: FunctionComponent<{ showInputSearchIcon: boolean }> = ({ 
   return null;
 };
 
-const CancelIconClass: FunctionComponent<{ query: string; onCancel: (e: any) => void }> = ({ query, onCancel }) => {
+export const CancelIconClass: FunctionComponent<{ query: string; onCancel: (e: any) => void }> = ({
+  query,
+  onCancel,
+}) => {
   const cancel_button_is_needed = query != undefined && query.length > 0;
   if (cancel_button_is_needed) {
     return (
@@ -53,6 +55,8 @@ export default class Input extends React.Component<InputProps> {
       useAutoFocus = true,
     } = this.props;
 
+    const title = query.length != null && query.length > 0 ? 'Search ' + query + ' on Gowiz' : 'Search on Gowiz';
+
     return (
       <>
         <SearchIconClass showInputSearchIcon={showInputSearchIcon} />
@@ -65,7 +69,7 @@ export default class Input extends React.Component<InputProps> {
             autoComplete="off"
             name="query"
             type="text"
-            title={query.length != null && query.length > 0 ? 'Search ' + query + ' on Gowiz' : 'Search on Gowiz'}
+            title={title}
             aria-required="true"
             aria-label="Search query input"
             autoFocus={useAutoFocus}
