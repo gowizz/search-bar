@@ -1,11 +1,11 @@
-import * as locs from '../src/util/storage';
+import * as locs from '../../src/util/storage';
 
 beforeEach(() => {
   localStorage.clear();
 });
 
-describe('Localstorage', () => {
-  it('check if key in local storage', () => {
+describe('Localstorage', async () => {
+  it('check if key in local storage', async () => {
     expect(locs.searchTermInLocalStorage('word')).toBe(false);
     /*                               */
     locs.addSearchTermToLocalStorage('word');
@@ -30,7 +30,7 @@ describe('Localstorage', () => {
     localStorage.setItem('gowiz_search_suggestion', JSON.stringify(current_values));
     expect(locs.searchTermInLocalStorage('test')).toBe(false);
   });
-  it('add key to local storage', () => {
+  it('add key to local storage', async () => {
     locs.addSearchTermToLocalStorage('word');
     expect(locs.searchTermInLocalStorage('word')).toBe(true);
     /*                               */
@@ -39,7 +39,7 @@ describe('Localstorage', () => {
     expect(locs.searchTermInLocalStorage('word')).toBe(true);
     expect(locs.searchTermInLocalStorage('play')).toBe(false);
   });
-  it('remove key from local storage', () => {
+  it('remove key from local storage', async () => {
     locs.addSearchTermToLocalStorage('word');
     expect(locs.searchTermInLocalStorage('word')).toBe(true);
     /*                               */
@@ -64,7 +64,7 @@ describe('Localstorage', () => {
     expect(res.length).toBe(1);
     expect(res).toStrictEqual(['test']);
   });
-  it('previously searched queries', () => {
+  it('previously searched queries', async () => {
     let res = locs.getSearchTermsInLocalStorage();
     expect(res.length).toBe(0);
     /*                               */
@@ -100,7 +100,7 @@ describe('Localstorage', () => {
     expect(res.length).toBe(1);
     expect(res).toStrictEqual(['word']);
   });
-  it('can handle multiple key types', () => {
+  it('can handle multiple key types', async () => {
     let res = locs.getSearchTermsInLocalStorage();
     expect(res.length).toBe(0);
     /*                               */
@@ -108,12 +108,12 @@ describe('Localstorage', () => {
     res = locs.getSearchTermsInLocalStorage();
     expect(res.length).toBe(0);
   });
-  it('session token can be generated', () => {
+  it('session token can be generated', async () => {
     let res = locs.generateInputSessionToken();
     expect(res.length).toBe(36);
     expect(locs.getInputSessionToken()).toBe(res);
   });
-  it('session token can be retrieved', () => {
+  it('session token can be retrieved', async () => {
     sessionStorage.clear();
     let res = locs.getInputSessionToken();
     expect(res).toBe(null);
@@ -123,7 +123,7 @@ describe('Localstorage', () => {
     expect(locs.getInputSessionToken()).toBe(res);
     expect(locs.getInputSessionToken('input_form_token')).toBe(res);
   });
-  it('session token can be deleted', () => {
+  it('session token can be deleted', async () => {
     sessionStorage.clear();
     let res = locs.getInputSessionToken();
     expect(res).toBe(null);
