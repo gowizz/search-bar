@@ -38,6 +38,7 @@ The search bar is highly customizable and the following properties can be set.
 | showResultsSearchIcon | specify if search icon is displayed next to suggestions   | true    |                         |
 | useAutoComplete       | specify if Gowiz autocomplete is used                     | true    |                         |
 | useAutoFocus          | specify if the search bar is focused                      | false   |                         |
+| useDarkTheme          | specify if the search bar is shown in dark theme          | false   |                         |
 | maxResults            | number of search suggestions that will be shown           | 10      | 0 < x < 25              |
 | searchSuggestions     | predefined search suggestions                             | []      | 0 < x < 25 suggestions  |
 | searchDomains         | predefined domains the results are restricted to          | []      | 0 < x < domains         |
