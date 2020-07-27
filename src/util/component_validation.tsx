@@ -1,18 +1,125 @@
-import { Options } from '../index';
-import { string_contains_html_tags, url_is_valid } from './string_util';
+import { domain_to_host, format_index, string_contains_html_tags, url_is_valid } from './string_util';
+import { SearchboxOptions } from '../components/searchbox';
+import { SearchbarOptions } from '../components/searchbar';
 
-function format_index(index: number): string {
-  if (index === 1) {
-    return index + 'st';
-  } else if (index == 2) {
-    return index + 'nd';
-  } else if (index == 3) {
-    return index + 'rd';
+function query_is_valid(query: string): void {
+  const max_url_length = 2048;
+  const base_URL = 'https://gowiz.eu/search/';
+  const request_url = base_URL + encodeURIComponent(query);
+
+  if (request_url.length > max_url_length) {
+    throw new Error('The entered query is too long');
   }
-  return index + 'th';
+
+  if (string_contains_html_tags(query)) {
+    throw new Error(query + ' is not a valid query as it contains HTML tags');
+  }
 }
 
-export function index_has_valid_props(props: Options): void {
+function placeholder_is_valid(placeholder: string): void {
+  const encoded_component = encodeURIComponent(placeholder);
+  if (encoded_component.length > 150) {
+    throw new Error('Entered placeholder it too long. Maximum placeholder size is 150 characters');
+  } else if (string_contains_html_tags(placeholder)) {
+    throw new Error(placeholder + ' is not a valid placeholder as it contains HTML tags');
+  }
+}
+
+function search_suggestions_are_valid(searchSuggestions: string[]): void {
+  if (searchSuggestions.length > 25) {
+    throw new Error(
+      'The maximum number of search suggestions can be 25. Currently ' +
+        searchSuggestions.length +
+        ' search suggestions have been given'
+    );
+  }
+
+  let search_suggestions_count = {};
+
+  for (let i = 0; i < searchSuggestions.length; i++) {
+    const el = searchSuggestions[i];
+
+    if (el) {
+      const result = search_suggestions_count[el] !== undefined;
+      if (result) {
+        throw new Error('All search suggestions need to be unique. The first duplicate search suggestion is ' + el);
+      }
+      search_suggestions_count[el] = 1;
+      if (string_contains_html_tags(el)) {
+        throw new Error(el + ' is not a valid search suggestion as it contains HTML tags');
+      }
+      if (el.length > 150) {
+        const error_index = i + 1;
+
+        throw new Error(
+          'The ' +
+            format_index(error_index) +
+            ' search suggestion is too long. The maximum search suggestion size is 150 characters'
+        );
+      }
+    } else {
+      const error_index = i + 1;
+      throw new Error(
+        'Search suggestion can not be empty. The ' + format_index(error_index) + ' search suggestion is empty'
+      );
+    }
+  }
+}
+
+function search_domains_are_valid(searchDomains: string[]): void {
+  if (searchDomains.length > 10) {
+    throw new Error(
+      'The maximum number of domains search can be restricted to is 10. Currently ' +
+        searchDomains.length +
+        ' search domains have been entered'
+    );
+  }
+  let search_domains_count = {};
+  for (let i = 0; i < searchDomains.length; i++) {
+    let el = searchDomains[i];
+
+    if (el) {
+      if (el != el.trim()) {
+        const error_index = i + 1;
+        throw new Error('The ' + format_index(error_index) + ' search domain should be trimmed');
+      }
+      el = domain_to_host(el);
+      const result = search_domains_count[el] !== undefined;
+
+      if (result) {
+        throw new Error(
+          'All search domains need to be unique. The first duplicate search domain is ' + searchDomains[i]
+        );
+      }
+      search_domains_count[el] = 1;
+
+      if (url_is_valid(el) === false) {
+        throw new Error(el + ' is not a valid search domain');
+      }
+    } else {
+      const error_index = i + 1;
+      throw new Error('The ' + format_index(error_index) + ' search domain is empty');
+    }
+  }
+}
+
+function max_results_is_valid(maxResults: number): void {
+  if (maxResults < 0) {
+    throw new Error('Maximum results size can not be negative');
+  } else if (maxResults > 25) {
+    throw new Error(
+      'Maximum results size can not be more than 25. Currently entered max results size is ' + maxResults
+    );
+  }
+}
+
+function max_results_and_searchsuggestions(maxResults: number, searchSuggestions: string[]): void {
+  if (searchSuggestions.length > 0 && maxResults == 0) {
+    throw new Error('Maximum results size can not be zero if search suggestions are provided');
+  }
+}
+
+export function searchbox_has_valid_props(props: SearchboxOptions): void {
   const {
     query = '',
     searchSuggestions = [],
@@ -21,119 +128,62 @@ export function index_has_valid_props(props: Options): void {
     maxResults = 10,
   } = props;
 
-  if (query) {
-    const max_url_length = 2048;
-    const base_URL = 'https://gowiz.eu/search/';
-    const request_url = base_URL + encodeURIComponent(query);
-    if (request_url.length > max_url_length) {
-      const dif = decodeURIComponent(query).length + base_URL.length - max_url_length;
-      throw new Error('The entered query is too big. Reduce the length by ' + dif + ' characters.');
-    }
-    const query_is_valid_type = typeof query === 'string' || typeof query === 'number';
-    if (query_is_valid_type === false) {
-      throw new Error("The query is not suitable, because query can't be type " + typeof query);
-    }
+  query_is_valid(query);
+
+  search_suggestions_are_valid(searchSuggestions);
+
+  search_domains_are_valid(searchDomains);
+
+  placeholder_is_valid(placeholder);
+
+  max_results_is_valid(maxResults);
+
+  max_results_and_searchsuggestions(maxResults, searchSuggestions);
+}
+
+function api_key_is_valid(key: string): void {
+  if (key === null) {
+    throw new Error('API_KEY can not be null');
   }
 
-  if (searchSuggestions) {
-    if (searchSuggestions.length > 25) {
-      throw new Error(
-        'The maximum number of search suggestions is 25. Currently entered search suggestion list size is ' +
-          searchSuggestions.length
-      );
-    }
-
-    let search_suggestions_count = {};
-
-    for (let i = 0; i < searchSuggestions.length; i++) {
-      const search_suggestion_is_valid_type =
-        typeof searchSuggestions[i] === 'string' || typeof searchSuggestions[i] === 'number';
-      if (search_suggestion_is_valid_type === false) {
-        const error_index = i + 1;
-
-        throw new Error(
-          'The ' +
-            format_index(error_index) +
-            ' search suggestion ' +
-            searchSuggestions[i].toString() +
-            " is not suitable, because search suggestion can't be type " +
-            typeof searchSuggestions[i]
-        );
-      }
-
-      if (searchSuggestions[i]) {
-        const result = search_suggestions_count[searchSuggestions[i]];
-        if (result) {
-          throw new Error(
-            'All search suggestions need to be unique. The first duplicate search suggestion is ' + searchSuggestions[i]
-          );
-        }
-        search_suggestions_count[searchSuggestions[i]] = 1;
-        if (string_contains_html_tags(searchSuggestions[i])) {
-          throw new Error(searchSuggestions[i] + ' is not a valid search suggestion as it contains HTML tags');
-        }
-        if (searchSuggestions[i].length > 150) {
-          const error_index = i + 1;
-
-          throw new Error(
-            'The ' + format_index(error_index) + ' is too long. The maximum search suggestion size 150 characters'
-          );
-        }
-      } else {
-        const error_index = i + 1;
-
-        throw new Error('The ' + format_index(error_index) + ' search suggestion is empty');
-      }
-    }
+  if (key === undefined) {
+    throw new Error('API_KEY can not be undefined');
   }
 
-  if (searchDomains) {
-    if (searchDomains.length > 10) {
-      throw new Error(
-        'The maximum number of domains search can be restricted to is 10. Currently entered search domains list size is' +
-          searchDomains.length
-      );
-    }
-    let search_domains_count = {};
-    for (let i = 0; i < searchDomains.length; i++) {
-      if (searchDomains[i]) {
-        const result = search_domains_count[searchDomains[i]] === undefined;
-
-        if (result) {
-          throw new Error(
-            'All search domains need to be unique. The first duplicate search domain is ' + searchDomains[i]
-          );
-        }
-        search_domains_count[searchDomains[i]] = 1;
-        if (url_is_valid(searchDomains[i]) === false) {
-          throw new Error(searchDomains[i] + ' is not a valid search domain.');
-        }
-      } else {
-        const error_index = i + 1;
-        throw new Error('The ' + error_index + '. search domain is empty');
-      }
-    }
+  if (key.length == 0) {
+    throw new Error('API_KEY can not be empty');
   }
 
-  if (placeholder) {
-    if (placeholder.length > 150) {
-      throw new Error(
-        'The maximum size of the search bar placeholder can be 150 characters. Currently entered placeholder size is ' +
-          placeholder.length +
-          ' characters'
-      );
-    }
+  if (key !== key.trim()) {
+    throw new Error('API_KEY needs to be trimmed');
   }
 
-  if (maxResults) {
-    if (maxResults < 0) {
-      throw new Error("Maximum results size can't be negative");
-    } else if (maxResults == 0) {
-      throw new Error("Maximum results size can't be zero");
-    } else if (maxResults > 25) {
-      throw new Error(
-        "Maximum results size can't be more than 25. Currently entered max results size is " + maxResults
-      );
-    }
+  const nr_of_words = key.split(' ').length;
+
+  if (nr_of_words > 1) {
+    throw new Error('API_KEY can not be multiple words');
   }
+}
+
+export function searchbar_has_valid_props(props: SearchbarOptions) {
+  const {
+    API_KEY,
+    query = '',
+    placeholder = 'Search on Gowiz',
+    maxResults = 10,
+    searchSuggestions = [],
+    searchDomains = [],
+  } = props;
+
+  api_key_is_valid(API_KEY);
+
+  const searchbox_props = {
+    query: query,
+    searchSuggestions: searchSuggestions,
+    searchDomains: searchDomains,
+    placeholder: placeholder,
+    maxResults: maxResults,
+  };
+
+  return searchbox_has_valid_props(searchbox_props);
 }
