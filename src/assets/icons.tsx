@@ -9,6 +9,7 @@ function validate_icon_props(str: string, nr: number): number {
   if (nr < 1) {
     throw new Error(str + " can't be less than 1px");
   }
+  //TODO: validate if nr can be fraction
   return nr;
 }
 
@@ -49,4 +50,17 @@ const CancelIcon = (props: IconProps) => (
   </svg>
 );
 
-export { validate_icon_props, SearchIcon, TimeIcon, CancelIcon };
+const LeftArrowIcon = (props: IconProps) => (
+  <svg
+    fill="#0000"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    focusable="false"
+    width={props.width ? validate_icon_props('Width', props.width) : 16}
+    height={props.height ? validate_icon_props('Height', props.height) : 16}
+  >
+    <path d="M 3.566406 3 C 3.359375 3.046875 3.1875 3.183594 3.070312 3.378906 C 2.976562 3.535156 2.976562 3.625 2.976562 7.5 C 2.976562 11.171875 2.980469 11.46875 3.054688 11.609375 C 3.179688 11.832031 3.398438 11.96875 3.683594 11.992188 C 3.992188 12.015625 4.257812 11.882812 4.402344 11.625 C 4.5 11.453125 4.5 11.414062 4.5 8.527344 L 4.5 5.601562 L 12.132812 13.226562 C 16.328125 17.417969 19.824219 20.882812 19.90625 20.925781 C 20.242188 21.089844 20.679688 20.976562 20.886719 20.675781 C 21.007812 20.492188 21.039062 20.175781 20.953125 19.9375 C 20.925781 19.859375 17.609375 16.515625 13.25 12.148438 L 5.601562 4.5 L 8.527344 4.5 C 11.414062 4.5 11.453125 4.5 11.625 4.402344 C 11.882812 4.257812 12.015625 3.992188 11.992188 3.675781 C 11.96875 3.382812 11.859375 3.210938 11.621094 3.070312 C 11.464844 2.976562 11.367188 2.976562 7.59375 2.96875 C 5.464844 2.960938 3.65625 2.976562 3.566406 3 Z M 3.566406 3 " />
+  </svg>
+);
+
+export { validate_icon_props, SearchIcon, TimeIcon, CancelIcon, LeftArrowIcon };
