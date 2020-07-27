@@ -13,16 +13,8 @@
   min-height: 38px;
 }
 
-.gowiz_searchbar_container:hover {
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
-}
-
-.gowiz_searchbar_container:active {
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
-}
-
-.gowiz_searchbar_container:focus-within {
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+.dark_container {
+  background-color: #333;
 }
 
 @media (min-width: 1025px) {
