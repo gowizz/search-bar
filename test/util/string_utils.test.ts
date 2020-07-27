@@ -1,7 +1,7 @@
-import * as util from '../src/util/string_util';
+import * as util from '../../src/util/string_util';
 
 describe('String util', () => {
-  it('removing http:// or http:// and www', () => {
+  it('removing http:// or http:// and www', async () => {
     const queries = [
       'https://example.com',
       'https://www.example.com',
@@ -18,7 +18,7 @@ describe('String util', () => {
     }
   });
 
-  it('fully written domains are checked correctly', () => {
+  it('fully written domains are checked correctly', async () => {
     const queries = [
       'https://www.example.com',
       'https://www.example.org',
@@ -33,7 +33,7 @@ describe('String util', () => {
       expect(util.url_is_valid(url)).toBe(response);
     }
   });
-  it('partially written domains are checked correctly', () => {
+  it('partially written domains are checked correctly', async () => {
     const queries = [
       'https://example.com',
       'https://example.org',
@@ -51,7 +51,7 @@ describe('String util', () => {
       expect(util.url_is_valid(url)).toBe(response);
     }
   });
-  it('not correct domains are discovered', () => {
+  it('not correct domains are discovered', async () => {
     const queries = ['https:/example.com', 'example.', 'example', 'https:/example.com', 'https:example.com'];
     const response = false;
 
@@ -60,7 +60,7 @@ describe('String util', () => {
       expect(util.url_is_valid(url)).toBe(response);
     }
   });
-  it('html tags are discovered', () => {
+  it('html tags are discovered', async () => {
     let queries = [
       '<script>alert("hi")</script>',
       '<b>hi</b>',
@@ -82,6 +82,44 @@ describe('String util', () => {
     for (let i = 0; i < queries.length; i++) {
       let url = queries[i];
       expect(util.string_contains_html_tags(url)).toBe(response);
+    }
+  });
+
+  it('array index are formatted correctly', () => {
+    let bad_index = -5;
+    expect(() => {
+      util.format_index(bad_index);
+    }).toThrow('Array index smaller than 0 can not be formatted');
+
+    const index = [1, 2, 3, 4, 5, 11, 12, 13, 14, 15, 21, 22, 23, 24, 25, 100, 101, 102, 103, 104, 105];
+    const response = [
+      '1st',
+      '2nd',
+      '3rd',
+      '4th',
+      '5th',
+      '11th',
+      '12th',
+      '13th',
+      '14th',
+      '15th',
+      '21st',
+      '22nd',
+      '23rd',
+      '24th',
+      '25th',
+      '100th',
+      '101st',
+      '102nd',
+      '103rd',
+      '104th',
+      '105th',
+    ];
+
+    for (let i = 0; i < index.length; i++) {
+      let inn = index[i];
+      let res = response[i];
+      expect(util.format_index(inn)).toBe(res);
     }
   });
 });

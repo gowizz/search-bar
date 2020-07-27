@@ -1,11 +1,11 @@
-import * as highlight from '../src/util/highlight';
+import * as highlight from '../../src/util/highlight';
 
 beforeEach(() => {
   localStorage.clear();
 });
 
 describe('Highlighting', () => {
-  it('empty values', () => {
+  it('empty values', async () => {
     let highlights = highlight.getHighlightParts('', '');
     expect(highlights.length).toBe(0);
     highlights = highlight.getHighlightParts(undefined, '');
@@ -17,7 +17,7 @@ describe('Highlighting', () => {
     highlights = highlight.getHighlightParts('', 'test');
     expect(highlights.length).toBe(0);
   });
-  it('equal queries', () => {
+  it('equal queries', async () => {
     let highlights = highlight.getHighlightParts('test', 'test');
     expect(highlights.length).toBe(0);
     /*                               */
@@ -27,7 +27,7 @@ describe('Highlighting', () => {
     highlights = highlight.getHighlightParts('test', ' test');
     expect(highlights.length).toBe(0);
   });
-  it('basic highlighting', () => {
+  it('basic highlighting', async () => {
     let highlights = highlight.getHighlightParts('gowiz', 'g');
     expect(highlights.length).toBe(2);
     expect(highlights).toStrictEqual(['g', 'owiz']);

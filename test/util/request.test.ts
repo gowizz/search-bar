@@ -1,5 +1,5 @@
-import * as req from '../src/util/request';
-import * as locs from '../src/util/storage';
+import * as req from '../../src/util/request';
+import * as locs from '../../src/util/storage';
 
 describe('Request', () => {
   const { location } = window;
@@ -17,7 +17,7 @@ describe('Request', () => {
     window.location = location;
   });
 
-  it('no request with empty queries', () => {
+  it('no request with empty queries', async () => {
     const queries = ['', ' '];
     const token = locs.generateInputSessionToken();
     for (let i = 0; i < queries.length; i++) {
@@ -27,7 +27,7 @@ describe('Request', () => {
     }
   });
 
-  it('valid query should trigger a request', () => {
+  it('valid query should trigger a request', async () => {
     const queries = ['test', 'Test', 'testing'];
     const responses = [
       'https://gowiz.eu/search/test',
@@ -43,7 +43,8 @@ describe('Request', () => {
       expect(window.location.replace).toHaveBeenCalledWith(responses[i]);
     }
   });
-  it('query can be  a webaddress', () => {
+
+  it('query can be  a webaddress', async () => {
     const queries = ['example.com', 'https://example.com', 'https://www.example.com'];
     const responses = [
       'https://gowiz.eu/search/example.com',
@@ -60,7 +61,7 @@ describe('Request', () => {
     }
   });
 
-  it('search can be restricted to pre defined domains', () => {
+  it('search can be restricted to pre defined domains', async () => {
     const queries = ['test', 'test'];
     const pre_domains = [['https://example.com'], ['https://example.com', 'example.com', 'wwww.example.org']];
     const responses = [
@@ -77,7 +78,7 @@ describe('Request', () => {
     }
   });
 
-  it('query can contain search domains', () => {
+  it('query can contain search domains', async () => {
     // query, response
     const dict = {
       'test site:example.com': 'https://gowiz.eu/search/test%20site%3Aexample.com',
@@ -103,7 +104,7 @@ describe('Request', () => {
     }
   });
 
-  it('query and predefined domains are merged correctly', () => {
+  it('query and predefined domains are merged correctly', async () => {
     const queries = [
       'test site:example.org',
       'test site:example.com',
@@ -132,7 +133,7 @@ describe('Request', () => {
     }
   });
 
-  it('query does not have to be in english', () => {
+  it('query does not have to be in english', async () => {
     jest.clearAllMocks();
     const all_queries = [
       {
@@ -463,7 +464,7 @@ describe('Request', () => {
     }
   });
 
-  it('query is formatted before the call', () => {
+  it('query is formatted before the call', async () => {
     jest.clearAllMocks();
     const query = ' test ';
     const token = locs.generateInputSessionToken();
@@ -471,7 +472,8 @@ describe('Request', () => {
     expect(window.location.replace).toHaveBeenCalledTimes(1);
     expect(window.location.replace).toHaveBeenCalledWith('https://gowiz.eu/search/test');
   });
-  it('request is not triggered when the query is too long', () => {
+
+  it('request is not triggered when the query is too long', async () => {
     jest.clearAllMocks();
     let query = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -500,7 +502,8 @@ describe('Request', () => {
     req.goToGowiz(query, token);
     expect(window.location.replace).toHaveBeenCalledTimes(1);
   });
-  it('special characters are escaped', () => {
+
+  it('special characters are escaped', async () => {
     // query, response
     const dict = {
       '/search': 'https://gowiz.eu/search/%2Fsearch',
@@ -521,7 +524,7 @@ describe('Request', () => {
     }
   });
 
-  it('attacks can be tolerated', () => {
+  it('attacks can be tolerated', async () => {
     // query, response
     const dict = {
       'https://gowiz.eu/search': 'https://gowiz.eu/search/https%3A%2F%2Fgowiz.eu%2Fsearch',

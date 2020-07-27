@@ -1,11 +1,15 @@
 import React from 'react';
-import { fireEvent, cleanup, render } from '@testing-library/react';
+import { cleanup, render } from '@testing-library/react';
 
 import '@testing-library/jest-dom/extend-expect';
-import { CancelIconClass, SearchIconClass } from '../src/components/input';
-import { validate_icon_props } from '../src/assets/icons';
+import { CancelIconClass, SearchIconClass } from '../../src/components/input';
+import { validate_icon_props } from '../../src/assets/icons';
 
 describe(' Icons', () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
   const onCancel = jest.fn();
   afterEach(cleanup);
   it('Search icon is present when stated', async () => {
@@ -37,12 +41,9 @@ describe(' Icons', () => {
     expect(container.childNodes.length).toBe(1);
 
     const svg = container.firstChild.childNodes[0];
-
     expect(svg.nodeName).toBe('svg');
-
-    fireEvent.click(container.firstChild);
-    expect(onCancel).toBeCalled();
   });
+
   it('Cancel icon is not present when query is empty', async () => {
     let { container } = render(<CancelIconClass query={''} onCancel={onCancel} />);
     expect(container.firstChild).toBe(null);

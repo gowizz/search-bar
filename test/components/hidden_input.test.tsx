@@ -1,16 +1,16 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import { HiddenInput } from '../src/components/hidden_input';
-import { getInputSessionToken } from '../src/util/storage';
+import { HiddenInput } from '../../src/components/hidden_input';
+import { getInputSessionToken } from '../../src/util/storage';
 
 describe('HiddenInput', () => {
-  it('Renders the hidden input', () => {
+  it('Renders the hidden input', async () => {
     const { queryByTestId } = render(<HiddenInput />);
     const inputNode = queryByTestId('token');
     expect(inputNode).toBeInTheDocument();
   });
-  it('Session token in set correctly', () => {
+  it('Session token in set correctly', async () => {
     const { queryByTestId } = render(<HiddenInput />);
     const inputNode = queryByTestId('token');
     expect(inputNode).toBeInTheDocument();

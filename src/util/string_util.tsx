@@ -28,3 +28,20 @@ export function string_contains_html_tags(str: string): boolean {
   const pattern = new RegExp(/<([A-Za-z][A-Za-z0-9]*)\b[^>]*>(.*?)<\/\1>/, 'i'); // fragment locator
   return !!pattern.test(str);
 }
+
+export function format_index(index: number): string {
+  if (index < 0) {
+    throw new Error('Array index smaller than 0 can not be formatted');
+  }
+  const j = index % 10;
+  const k = index % 100;
+
+  if (j == 1 && k != 11) {
+    return index + 'st';
+  } else if (j == 2 && k != 12) {
+    return index + 'nd';
+  } else if (j == 3 && k != 13) {
+    return index + 'rd';
+  }
+  return index + 'th';
+}

@@ -24,6 +24,12 @@
   cursor: default;
 }
 
+.dark_highlight_search_suggestion,
+.dark_gowiz_searchbar_results li:hover {
+  background-color: #282828;
+  cursor: default;
+}
+
 .gowiz_searchbar_results {
   margin-left: 13px;
 }
@@ -32,6 +38,10 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.dark_ellipsis {
+  color: #fff;
 }
 
 .result_icon {
@@ -44,7 +54,11 @@
   width: 18px;
 }
 
-.remove_icon {
+.dark_result_icon svg {
+  fill: #fff;
+}
+
+.secondary_action_icon {
   height: 18px;
   width: 18px;
   display: flex;
@@ -54,14 +68,20 @@
   padding-left: 16px;
 }
 
-.remove_icon svg {
+.secondary_action_icon svg {
   width: 14px;
   height: 14px;
   fill: black;
 }
 
+.dark_secondary_action_icon svg {
+  width: 14px;
+  height: 14px;
+  fill: #fff;
+}
+
 @media (min-width: 1025px) {
-  .remove_icon {
+  .secondary_action_icon {
     width: 11%;
   }
 
@@ -71,7 +91,7 @@
 }
 
 @media (min-width: 901px) and (max-width: 1024px) {
-  .remove_icon {
+  .secondary_action_icon {
     width: 11%;
   }
 
@@ -81,7 +101,7 @@
 }
 
 @media (min-width: 769px) and (max-width: 900px) {
-  .remove_icon {
+  .secondary_action_icon {
     width: 11%;
   }
 
@@ -91,7 +111,7 @@
 }
 
 @media (min-width: 601px) and (max-width: 768px) {
-  .remove_icon {
+  .secondary_action_icon {
     width: 11%;
   }
 
@@ -101,7 +121,7 @@
 }
 
 @media (min-width: 481px) and (max-width: 600px) {
-  .remove_icon {
+  .secondary_action_icon {
     width: 15%;
   }
 
@@ -111,7 +131,7 @@
 }
 
 @media (min-width: 321px) and (max-width: 480px) {
-  .remove_icon {
+  .secondary_action_icon {
     width: 19%;
   }
 
@@ -121,7 +141,7 @@
 }
 
 @media (min-width: 1px) and (max-width: 320px) {
-  .remove_icon {
+  .secondary_action_icon {
     width: 19%;
   }
 
