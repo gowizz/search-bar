@@ -4,7 +4,7 @@ beforeEach(() => {
   localStorage.clear();
 });
 
-describe('Localstorage', async () => {
+describe('Localstorage', () => {
   it('check if key in local storage', async () => {
     expect(locs.searchTermInLocalStorage('word')).toBe(false);
     /*                               */

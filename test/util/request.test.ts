@@ -43,6 +43,7 @@ describe('Request', () => {
       expect(window.location.replace).toHaveBeenCalledWith(responses[i]);
     }
   });
+
   it('query can be  a webaddress', async () => {
     const queries = ['example.com', 'https://example.com', 'https://www.example.com'];
     const responses = [
@@ -471,6 +472,7 @@ describe('Request', () => {
     expect(window.location.replace).toHaveBeenCalledTimes(1);
     expect(window.location.replace).toHaveBeenCalledWith('https://gowiz.eu/search/test');
   });
+
   it('request is not triggered when the query is too long', async () => {
     jest.clearAllMocks();
     let query = '';
@@ -500,6 +502,7 @@ describe('Request', () => {
     req.goToGowiz(query, token);
     expect(window.location.replace).toHaveBeenCalledTimes(1);
   });
+
   it('special characters are escaped', async () => {
     // query, response
     const dict = {

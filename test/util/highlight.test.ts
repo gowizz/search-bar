@@ -4,8 +4,8 @@ beforeEach(() => {
   localStorage.clear();
 });
 
-describe('Highlighting', async () => {
-  it('empty values', () => {
+describe('Highlighting', () => {
+  it('empty values', async () => {
     let highlights = highlight.getHighlightParts('', '');
     expect(highlights.length).toBe(0);
     highlights = highlight.getHighlightParts(undefined, '');

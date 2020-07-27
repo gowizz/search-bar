@@ -47,7 +47,6 @@ Many applications require components in dark mode and with a single property the
 
 ![Dark Searchbox](https://res.cloudinary.com/dl7zea2jd/image/upload/v1595873370/Gowiz/Github/DarkThemeSearchbox_dkl935.png)
 
-
 #### Auto complete
 
 The search bar has an autocomplete functionality that attempts to predict the next query.
