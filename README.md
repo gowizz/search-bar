@@ -25,7 +25,7 @@ import { Searchbox, GowizSearchBar } from '@gowiz/searchbar';
 This component allows you to create a fully functional search bar that forwards the query to the Gowiz search engine.
 By default this component does not require any properties and it renders as follows.
 
-![To Gowiz Search bar](https://res.cloudinary.com/dl7zea2jd/image/upload/v1595520606/Gowiz/Github/ToGowizDefaultSearchBar_y3oowk.png)
+![Searchbox](https://res.cloudinary.com/dl7zea2jd/image/upload/v1595520606/Gowiz/Github/ToGowizDefaultSearchBar_y3oowk.png)
 
 The search bar is highly customizable and the following properties can be set.
 
@@ -42,6 +42,11 @@ The search bar is highly customizable and the following properties can be set.
 | maxResults            | number of search suggestions that will be shown           | 10      | 0 < x < 25              |
 | searchSuggestions     | predefined search suggestions                             | []      | 0 < x < 25 suggestions  |
 | searchDomains         | predefined domains the results are restricted to          | []      | 0 < x < domains         |
+
+Many applications require components in dark mode and with a single property the searchbox renders in dark theme
+
+![Dark Searchbox](https://res.cloudinary.com/dl7zea2jd/image/upload/v1595873370/Gowiz/Github/DarkThemeSearchbox_dkl935.png)
+
 
 #### Auto complete
 
