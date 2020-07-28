@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { searchbox_has_valid_props } from '../util/component_validation';
 import { addSearchTermToLocalStorage, removeSearchTermFromLocalStorage } from '../util/storage';
 import { goToGowiz } from '../util/request';
 
@@ -9,23 +8,11 @@ import shallowCompare from 'react-addons-shallow-compare';
 
 import Input from './input';
 import Results from './result';
-
-export interface SearchboxOptions {
-  query?: string;
-  placeholder?: string;
-  useCaching?: boolean;
-  showInputSearchIcon?: boolean;
-  showResultsSearchIcon?: boolean;
-  useAutoComplete?: boolean;
-  useDarkTheme?: boolean;
-  useAutoFocus?: boolean;
-  maxResults?: number;
-  searchSuggestions?: string[];
-  searchDomains?: string[];
-}
+import { SearchboxOptions } from '../models/model';
+import { searchbox_has_valid_props } from '../util/component_validation';
 
 interface SearchboxState {
-  current_query: string;
+  query: string; // the query we want to start searching for
   results: string[];
   useAutoComplete: boolean;
   highlight_query_index: number;
@@ -39,14 +26,13 @@ export default class Searchbox extends React.Component<SearchboxOptions, Searchb
     searchbox_has_valid_props(props);
     super(props);
     this.state = {
-      current_query: this.props.query ? this.props.query : '',
-      results:
-        this.props.searchSuggestions != null && this.props.searchSuggestions.length > this.props.maxResults
-          ? this.props.searchSuggestions.slice(0, this.props.maxResults)
-          : this.props.searchSuggestions,
-      useAutoComplete: this.props.useAutoComplete !== false,
+      query: this.props.query ? this.props.query : '',
+      results: this.initialResults(),
+      useAutoComplete:
+        this.props.useAutoComplete === null || this.props.useAutoComplete === undefined
+          ? true
+          : this.props.useAutoComplete,
       highlight_query_index: -1,
-
       hasSearched: false,
     };
 
@@ -55,6 +41,7 @@ export default class Searchbox extends React.Component<SearchboxOptions, Searchb
     this.handleOnChange = this.handleOnChange.bind(this);
     this.handleOnCancel = this.handleOnCancel.bind(this);
     this.handleOnKey = this.handleOnKey.bind(this);
+
     this.handleSearchSuggestionRemove = this.handleSearchSuggestionRemove.bind(this);
 
     this.handleOnToSearchBarClick = this.handleOnToSearchBarClick.bind(this);
@@ -62,10 +49,26 @@ export default class Searchbox extends React.Component<SearchboxOptions, Searchb
     this.result_ref = React.createRef();
   }
 
+  initialResults(): string[] {
+    const searchSuggestions =
+      this.props.searchSuggestions === null || this.props.searchSuggestions === undefined
+        ? []
+        : this.props.searchSuggestions;
+
+    const maxResults =
+      this.props.maxResults === null || this.props.maxResults === undefined
+        ? searchSuggestions.length
+        : this.props.maxResults;
+    return searchSuggestions.slice(0, maxResults);
+  }
+
   handleOnSubmit(event: any): void {
     event.preventDefault();
 
-    const inputs = document.getElementById('gowiz_searchbox_form');
+    const inputs: HTMLElement | null = document.getElementById('gowiz_searchbox_form');
+    if (inputs === null) {
+      return;
+    }
     const query = inputs['query']['value'];
     const token = inputs['token']['value'];
 
@@ -85,39 +88,68 @@ export default class Searchbox extends React.Component<SearchboxOptions, Searchb
 
     const { hasSearched, useAutoComplete } = this.state;
 
-    const user_has_no_searched_and_we_use_autocomplete = hasSearched === false && useAutoComplete === true;
-    const user_has_no_searched_and_we_do_not_use_autocomplete = hasSearched === false && useAutoComplete === false;
+    const user_has_not_searched_and_we_use_autocomplete = !hasSearched && useAutoComplete;
+    const user_has_not_searched_and_we_do_not_use_autocomplete = !hasSearched && !useAutoComplete;
 
-    const user_has_searched_and_we_use_autocomplete = hasSearched === true && useAutoComplete === true;
-    const user_has_searched_and_we_do_not_use_autocomplete = hasSearched === true && useAutoComplete === false;
+    const user_has_searched_and_we_use_autocomplete = hasSearched && useAutoComplete;
+    const user_has_searched_and_we_not_use_autocomplete = hasSearched && !useAutoComplete;
 
     const should_reset_highlight_index = this.state.highlight_query_index != -1;
 
-    //TODO: fix this, it looks very bad and complicated
+    const new_query = event.target.value;
+    //TODO: this if statmenet should be simplified
 
-    if (user_has_no_searched_and_we_use_autocomplete) {
+    if (user_has_not_searched_and_we_do_not_use_autocomplete) {
       if (should_reset_highlight_index) {
-        this.setState({ current_query: event.target.value, hasSearched: true, highlight_query_index: -1 });
+        this.setState({
+          query: new_query,
+          hasSearched: true,
+          highlight_query_index: -1,
+        });
       } else {
-        this.setState({ current_query: event.target.value, hasSearched: true });
+        this.setState({
+          query: event.target.value,
+          hasSearched: true,
+        });
       }
-    } else if (user_has_no_searched_and_we_do_not_use_autocomplete) {
+    } else if (user_has_not_searched_and_we_use_autocomplete) {
       if (should_reset_highlight_index) {
-        this.setState({ current_query: event.target.value, hasSearched: true, highlight_query_index: -1 });
+        this.setState({
+          query: new_query,
+          hasSearched: true,
+          highlight_query_index: -1,
+          useAutoComplete: false,
+        });
       } else {
-        this.setState({ current_query: event.target.value, hasSearched: true });
+        this.setState({
+          query: event.target.value,
+          hasSearched: true,
+          useAutoComplete: false,
+        });
+      }
+    } else if (user_has_searched_and_we_not_use_autocomplete) {
+      if (should_reset_highlight_index) {
+        this.setState({
+          query: new_query,
+          highlight_query_index: -1,
+        });
+      } else {
+        this.setState({
+          query: event.target.value,
+        });
       }
     } else if (user_has_searched_and_we_use_autocomplete) {
       if (should_reset_highlight_index) {
-        this.setState({ current_query: event.target.value, highlight_query_index: -1 });
+        this.setState({
+          query: new_query,
+          highlight_query_index: -1,
+          useAutoComplete: false,
+        });
       } else {
-        this.setState({ current_query: event.target.value });
-      }
-    } else if (user_has_searched_and_we_do_not_use_autocomplete) {
-      if (should_reset_highlight_index) {
-        this.setState({ current_query: event.target.value, highlight_query_index: -1 });
-      } else {
-        this.setState({ current_query: event.target.value });
+        this.setState({
+          query: event.target.value,
+          useAutoComplete: false,
+        });
       }
     }
   }
@@ -126,14 +158,17 @@ export default class Searchbox extends React.Component<SearchboxOptions, Searchb
     event.preventDefault();
 
     if (this.state.highlight_query_index != -1) {
-      this.setState({ current_query: '', useAutoComplete: false, highlight_query_index: -1 });
+      this.setState({ query: '', useAutoComplete: false, highlight_query_index: -1 });
     } else {
-      this.setState({ current_query: '', useAutoComplete: false });
+      this.setState({ query: '', useAutoComplete: false });
     }
   }
 
   handleOnSelect(event: any) {
     const inputs = document.getElementById('gowiz_searchbox_form');
+    if (inputs === null) {
+      return;
+    }
 
     const token = inputs['token']['value'];
     const query = event.target.textContent;
@@ -141,7 +176,7 @@ export default class Searchbox extends React.Component<SearchboxOptions, Searchb
     const should_send_request = query != null && query.length > 0 && token != null;
 
     if (should_send_request) {
-      this.setState({ current_query: query });
+      this.setState({ query: query });
       addSearchTermToLocalStorage(query);
       goToGowiz(query, token, this.props.searchDomains);
     }
@@ -171,11 +206,12 @@ export default class Searchbox extends React.Component<SearchboxOptions, Searchb
         let current_nr = this.state.highlight_query_index + change;
         current_nr = current_nr <= -1 || current_nr >= max_nr ? -1 : current_nr;
 
-        const next_query = current_nr === -1 ? this.props.query : this.state.results[current_nr];
+        const next_query =
+          current_nr === -1 ? (this.props.query ? this.props.query : '') : this.state.results[current_nr];
 
         this.setState({
           highlight_query_index: current_nr,
-          current_query: next_query,
+          query: next_query,
         });
       }
     } else if (['Escape'].includes(event.key)) {
@@ -191,12 +227,15 @@ export default class Searchbox extends React.Component<SearchboxOptions, Searchb
 
   handleSearchSuggestionRemove(str: string) {
     removeSearchTermFromLocalStorage(str);
-    this.result_ref.current.forceUpdateMe();
+    const result_component = this.result_ref.current;
+    if (result_component != null) {
+      result_component.forceUpdateMe();
+    }
   }
 
   handleOnToSearchBarClick(str: string) {
     this.setState({
-      current_query: str,
+      query: str,
     });
   }
 
@@ -208,26 +247,21 @@ export default class Searchbox extends React.Component<SearchboxOptions, Searchb
     document.removeEventListener('keydown', this.handleOnKey, false);
   }
 
-  shouldComponentUpdate(
-    nextProps: Readonly<SearchboxOptions>,
-    nextState: Readonly<SearchboxState>,
-    nextContext: any
-  ): boolean {
+  shouldComponentUpdate(nextProps: Readonly<SearchboxOptions>, nextState: Readonly<SearchboxState>): boolean {
     return shallowCompare(this, nextProps, nextState);
   }
 
   render() {
     const {
-      searchSuggestions: [],
       placeholder = 'Search on Gowiz',
       useCaching = true,
       showInputSearchIcon = true,
       showResultsSearchIcon = true,
       useAutoFocus = false,
-      useDarkTheme = true, //TODO: it should be false
+      useDarkTheme = false,
       maxResults = 10,
     } = this.props;
-    const { results, current_query, hasSearched, useAutoComplete } = this.state;
+    const { results, query, hasSearched, useAutoComplete } = this.state;
 
     const results_should_render = results != undefined && results.length > 0 && hasSearched && useAutoComplete;
 
@@ -242,7 +276,7 @@ export default class Searchbox extends React.Component<SearchboxOptions, Searchb
         <form onSubmit={(e) => this.handleOnSubmit(e)} id={'gowiz_searchbox_form'}>
           <div className="gowiz_searchbar_input">
             <Input
-              query={current_query}
+              query={query}
               placeholder={placeholder}
               useAutoFocus={useAutoFocus}
               onChange={this.handleOnChange}
@@ -257,13 +291,13 @@ export default class Searchbox extends React.Component<SearchboxOptions, Searchb
                 ref={this.result_ref}
                 onSelect={this.handleOnSelect}
                 onRemove={this.handleSearchSuggestionRemove}
+                onClick={this.handleOnToSearchBarClick}
                 maxResults={maxResults}
                 results={results}
                 showResultsSearchIcon={showResultsSearchIcon}
                 useCashing={useCaching}
-                query={current_query}
+                query={query}
                 hasSearched={hasSearched}
-                onClick={this.handleOnToSearchBarClick}
                 useDarkTheme={useDarkTheme}
               />
             </div>
@@ -279,6 +313,5 @@ export default class Searchbox extends React.Component<SearchboxOptions, Searchb
 // TODO: fetch new autocomplete suggestions
 //TODO: gary background can only be present on a single element. if mouse is on an element the it's highlighted
 //TODO: handle click outside of the search bar are
-//TODO: use props validation
 //TODO: double click on input should show last 10 historic searches is autofocus is not enabled
 //TODO: if props does not use autocomplete, then results are adjusted using fuse search
