@@ -1,11 +1,9 @@
-import React from 'react';
 import { cleanup } from '@testing-library/react';
 
 import '@testing-library/jest-dom/extend-expect';
-import { SearchboxOptions } from '../../src/components/searchbox';
 
 import * as val from '../../src/util/component_validation';
-import { SearchbarOptions } from '../../src/components/searchbar';
+import { SearchbarOptions, SearchboxOptions } from '../../src/models/model';
 
 describe('Input validation', () => {
   afterEach(cleanup);

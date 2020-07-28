@@ -1,6 +1,5 @@
 import { domain_to_host, format_index, string_contains_html_tags, url_is_valid } from './string_util';
-import { SearchboxOptions } from '../components/searchbox';
-import { SearchbarOptions } from '../components/searchbar';
+import { SearchbarOptions, SearchboxOptions } from '../models/model';
 
 function query_is_valid(query: string): void {
   const max_url_length = 2048;
@@ -34,13 +33,13 @@ function search_suggestions_are_valid(searchSuggestions: string[]): void {
     );
   }
 
-  let search_suggestions_count = {};
+  let search_suggestions_count: { [el: string]: number } = {};
 
   for (let i = 0; i < searchSuggestions.length; i++) {
     const el = searchSuggestions[i];
 
     if (el) {
-      const result = search_suggestions_count[el] !== undefined;
+      const result: boolean = search_suggestions_count[el] !== undefined;
       if (result) {
         throw new Error('All search suggestions need to be unique. The first duplicate search suggestion is ' + el);
       }
@@ -74,7 +73,8 @@ function search_domains_are_valid(searchDomains: string[]): void {
         ' search domains have been entered'
     );
   }
-  let search_domains_count = {};
+
+  let search_domains_count: { [el: string]: number } = {};
   for (let i = 0; i < searchDomains.length; i++) {
     let el = searchDomains[i];
 
@@ -93,7 +93,7 @@ function search_domains_are_valid(searchDomains: string[]): void {
       }
       search_domains_count[el] = 1;
 
-      if (url_is_valid(el) === false) {
+      if (!url_is_valid(el)) {
         throw new Error(el + ' is not a valid search domain');
       }
     } else {
