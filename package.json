@@ -11,7 +11,8 @@
     "coverage": "jest --coverage",
     "lint:css": "npx stylelint \"**/*.css\" --fix",
     "format": "prettier --write \"**/*.+(json|md|ts|tsx)\"",
-    "prepare": "npm dedupe"
+    "prepare": "npm dedupe",
+    "type_build": "tsc --declaration"
   },
   "repository": {
     "type": "git",
@@ -47,9 +48,11 @@
   },
   "pre-commit": [
     "lint:css",
-    "format"
+    "format",
+    "type_build"
   ],
   "devDependencies": {
+    "@types/react-addons-shallow-compare": "^0.14.22",
     "@testing-library/jest-dom": "^5.11.1",
     "@testing-library/react": "^10.4.7",
     "@types/jest": "^26.0.5",
@@ -70,7 +73,8 @@
     "typescript": "^3.9.7",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.12",
-    "webpack-merge": "^5.0.9"
+    "webpack-merge": "^5.0.9",
+    "uuidv4": "^6.2.0"
   },
   "dependencies": {},
   "peerDependencies": {
