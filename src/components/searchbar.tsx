@@ -1,20 +1,5 @@
 import React from 'react';
-import { Searchresult } from '../models/searchresult';
-
-export interface SearchbarOptions {
-  onSubmit: (results: Searchresult[]) => void;
-  API_KEY: string;
-  query?: string;
-  placeholder?: string;
-  useCaching?: boolean;
-  showInputSearchIcon?: boolean;
-  showResultsSearchIcon?: boolean;
-  useAutoComplete?: boolean;
-  useAutoFocus?: boolean;
-  maxResults?: number;
-  searchSuggestions?: string[];
-  searchDomains?: string[];
-}
+import { SearchbarOptions } from '../models/model';
 
 interface SearchBarState {
   current_query: string;

@@ -154,7 +154,7 @@ describe('Input', () => {
 
     it('First space bar in query is treated correctly', async () => {
       let { container, queryByTestId } = render(<Input query={'          '} onChange={onChange} onCancel={onCancel} />);
-      expect(container.childNodes.length).toBe(3);
+      expect(container.childNodes.length).toBe(2);
 
       const input_class = container.childNodes[1];
 

@@ -1,15 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { CancelIcon, SearchIcon } from '../assets/icons';
-
-interface InputProps {
-  query?: string;
-  placeholder?: string;
-  onChange: (e: any) => void;
-  onCancel: (e: any) => void;
-  showInputSearchIcon?: boolean;
-  useAutoFocus?: boolean;
-  useDarkTheme?: boolean;
-}
+import { InputProps } from '../models/model';
 
 export const SearchIconClass: FunctionComponent<{ useDarkTheme?: boolean; showInputSearchIcon: boolean }> = ({
   useDarkTheme = false,
@@ -84,11 +75,12 @@ export default class Input extends React.PureComponent<InputProps> {
             tabIndex={1}
           />
         </div>
-        <CancelIconClass query={this.props.query} onCancel={(e) => onCancel(e)} useDarkTheme={useDarkTheme} />
+        <CancelIconClass query={query} onCancel={(e) => onCancel(e)} useDarkTheme={useDarkTheme} />
       </>
     );
   }
 }
 
 //TODO: add testing on click and cancel and focus
-//TODO: add filterin
+//TODO: add filtering
+//TODO: move searchicon anc cancelicon to seppearate class

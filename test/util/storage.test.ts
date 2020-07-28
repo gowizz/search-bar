@@ -78,7 +78,10 @@ describe('Localstorage', () => {
     for (let i = 0; i < 100000; i++) {
       sum += 1;
     }
-    locs.addSearchTermToLocalStorage('nord');
+    if (sum > 10) {
+      locs.addSearchTermToLocalStorage('nord');
+    }
+
     for (let i = 0; i < 100000; i++) {
       sum += 1;
     }

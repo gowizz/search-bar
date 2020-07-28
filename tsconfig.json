@@ -3,7 +3,7 @@
     "outDir": "./lib",
     "allowJs": false,
     "module": "commonjs",
-    "target": "es5",
+    "target": "es6",
     "lib": ["es2015", "es2017", "dom"],
     "declaration": true,
     "jsx": "react",
@@ -13,8 +13,22 @@
     "alwaysStrict": true,
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
-    "diagnostics": true
+    "diagnostics": true,
+    "removeComments": true,
+    "noImplicitReturns": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
+    "strictFunctionTypes": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitThis": true
   },
   "include": ["./src/**/*"],
   "exclude": ["node_modules"]
 }
+/*
+//TODO: add them to cinfig file
+"strictNullChecks": true,
+ "noImplicitAny": true,
+     "strictPropertyInitialization": true
+    "allowSyntheticDefaultImports": false
+*/
