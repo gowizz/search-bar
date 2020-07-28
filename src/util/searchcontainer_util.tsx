@@ -25,9 +25,12 @@ export function getQueryAndToken(useCaching: boolean): SearchParams {
 export function getAutoCompleteValues(query: string): string[] {
   Promise.resolve(fetchAutoCompleteValues(query)).then(
     function (value) {
-      return value.map(function (x) {
-        return x['word'];
-      });
+      if (value != null) {
+        return value.map(function (x) {
+          return x['word'];
+        });
+      }
+      return [];
     },
     function () {
       return [];
