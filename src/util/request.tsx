@@ -1,6 +1,13 @@
 import { domain_to_host, reformat_url, url_is_valid } from './string_util';
-import { addSearchTermToLocalStorage, getInputSessionToken, removeInputSessionToken } from './storage';
+import { getInputSessionToken, removeInputSessionToken } from './storage';
 import { SearchResult } from '../models/model';
+
+const axios = require('axios');
+
+export interface SearchParams {
+  query: string;
+  token: string;
+}
 
 export function goToGowiz(user_query: string, token: string, pre_defined_domains: string[] = []): void {
   const session_token_from_storage = getInputSessionToken();
@@ -18,6 +25,8 @@ export function goToGowiz(user_query: string, token: string, pre_defined_domains
 
   let query_components = user_query.split(' ');
   let all_domains = pre_defined_domains;
+
+  //TODO: move this logic to searchcontainer util
 
   query_components = query_components.filter(function (el) {
     //TODO: we should only use site:
@@ -67,34 +76,22 @@ export function goToGowiz(user_query: string, token: string, pre_defined_domains
   }
 }
 
-export interface SearchParams {
-  query: string;
-  token: string;
-}
-
-export function getQueryAndToken(useCaching: boolean): SearchParams {
-  const inputs: HTMLElement | null = document.getElementById('gowiz_searchbox_form');
-  if (inputs === null) {
-    return {
-      query: '',
-      token: '',
-    };
-  }
-  const query = inputs['query']['value'];
-  const token = inputs['token']['value'];
-
-  if (useCaching) {
-    addSearchTermToLocalStorage(query);
-  }
-
-  return {
-    query: query,
-    token: token,
-  };
-}
-
 export function getSearchResults(sessionToken: string, query: string, API_KEY: string): SearchResult[] {
   //TODO: implement
   console.log('Sending search request to the api with token:' + sessionToken + ' query' + query + 'API_KEY' + API_KEY);
   return [];
 }
+
+export const fetch_GET = async (url: string, timout_in_seconds: number) => {
+  const conf = {
+    timeout: timout_in_seconds * 1000,
+  };
+  return await axios
+    .get(url, conf)
+    .then((res) => {
+      return res.data;
+    })
+    .catch(() => {
+      return null;
+    });
+};
