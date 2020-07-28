@@ -1,5 +1,6 @@
 import { domain_to_host, reformat_url, url_is_valid } from './string_util';
-import { getInputSessionToken, removeInputSessionToken } from './storage';
+import { addSearchTermToLocalStorage, getInputSessionToken, removeInputSessionToken } from './storage';
+import { SearchResult } from '../models/model';
 
 export function goToGowiz(user_query: string, token: string, pre_defined_domains: string[] = []): void {
   const session_token_from_storage = getInputSessionToken();
@@ -64,4 +65,36 @@ export function goToGowiz(user_query: string, token: string, pre_defined_domains
   if (request_url_is_valid) {
     window.location.replace(request_url);
   }
+}
+
+export interface SearchParams {
+  query: string;
+  token: string;
+}
+
+export function getQueryAndToken(useCaching: boolean): SearchParams {
+  const inputs: HTMLElement | null = document.getElementById('gowiz_searchbox_form');
+  if (inputs === null) {
+    return {
+      query: '',
+      token: '',
+    };
+  }
+  const query = inputs['query']['value'];
+  const token = inputs['token']['value'];
+
+  if (useCaching) {
+    addSearchTermToLocalStorage(query);
+  }
+
+  return {
+    query: query,
+    token: token,
+  };
+}
+
+export function getSearchResults(sessionToken: string, query: string, API_KEY: string): SearchResult[] {
+  //TODO: implement
+  console.log('Sending search request to the api with token:' + sessionToken + ' query' + query + 'API_KEY' + API_KEY);
+  return [];
 }

@@ -1,17 +1,89 @@
 import React from 'react';
-import { SearchbarOptions } from '../models/model';
+import { SearchResult } from '../models/model';
+import { getQueryAndToken, getSearchResults } from '../util/request';
+import SearchContainer from './searchcontainer';
+import { api_key_is_valid } from '../util/component_validation';
 
-interface SearchBarState {
-  current_query: string;
-  results: string[];
-  useAutoComplete: boolean;
-  highlight_query_index: number;
-  highlight_query: '';
-  hasSearched: boolean;
+export interface SearchbarOptions {
+  onSubmit: (results: SearchResult[]) => void;
+  API_KEY: string;
+  query?: string;
+  placeholder?: string;
+  useCaching?: boolean;
+  useDarkTheme?: boolean;
+  showInputSearchIcon?: boolean;
+  showResultsSearchIcon?: boolean;
+  useAutoComplete?: boolean;
+  useAutoFocus?: boolean;
+  maxResults?: number;
+  searchSuggestions?: string[];
+  searchDomains?: string[];
 }
 
-export default class SearchBar extends React.Component<SearchbarOptions, SearchBarState> {
+export default class SearchBar extends React.Component<SearchbarOptions> {
+  constructor(props) {
+    super(props);
+    this.handleOnSubmit = this.handleOnSubmit.bind(this);
+  }
+
+  handleOnSubmit(event: any): void {
+    event.preventDefault();
+
+    const inputs: HTMLElement | null = document.getElementById('gowiz_searchbox_form');
+    if (inputs === null) {
+      return;
+    }
+
+    const useCaching =
+      this.props.useCaching != null || this.props.useCaching != undefined ? true : this.props.useCaching;
+
+    const res = getQueryAndToken(useCaching);
+    const query = res.query;
+    const token = res.token;
+
+    const should_send_request = query != null && query.length > 0 && token != null;
+
+    if (should_send_request) {
+      const API_KEY = this.props.API_KEY;
+
+      const search_results = getSearchResults(token, query, API_KEY);
+
+      this.props.onSubmit(search_results);
+    }
+  }
+
   render() {
-    return <h1>The implementation of this component is not yet complete</h1>;
+    api_key_is_valid(this.props.API_KEY);
+
+    const {
+      query = '',
+      placeholder = 'Search on Gowiz',
+      useCaching = true,
+      showInputSearchIcon = true,
+      showResultsSearchIcon = true,
+      useAutoFocus = false,
+      useDarkTheme = false,
+      maxResults = 10,
+      useAutoComplete,
+      searchSuggestions,
+      searchDomains,
+    } = this.props;
+
+    return (
+      <SearchContainer
+        onSubmit={this.handleOnSubmit}
+        query={query}
+        placeholder={placeholder}
+        useCaching={useCaching}
+        showInputSearchIcon={showInputSearchIcon}
+        showResultsSearchIcon={showResultsSearchIcon}
+        useAutoComplete={useAutoComplete}
+        useDarkTheme={useDarkTheme}
+        useAutoFocus={useAutoFocus}
+        maxResults={maxResults}
+        searchSuggestions={searchSuggestions}
+        searchDomains={searchDomains}
+      />
+    );
   }
 }

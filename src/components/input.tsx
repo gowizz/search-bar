@@ -1,6 +1,15 @@
 import React, { FunctionComponent } from 'react';
 import { CancelIcon, SearchIcon } from '../assets/icons';
-import { InputProps } from '../models/model';
+
+export interface InputProps {
+  query?: string;
+  placeholder?: string;
+  onChange: (e: any) => void;
+  onCancel: (e: any) => void;
+  showInputSearchIcon?: boolean;
+  useAutoFocus?: boolean;
+  useDarkTheme?: boolean;
+}
 
 export const SearchIconClass: FunctionComponent<{ useDarkTheme?: boolean; showInputSearchIcon: boolean }> = ({
   useDarkTheme = false,

@@ -1,5 +1,5 @@
 import { domain_to_host, format_index, string_contains_html_tags, url_is_valid } from './string_util';
-import { SearchbarOptions, SearchboxOptions } from '../models/model';
+import { SearchboxOptions } from '../components/searchbox';
 
 function query_is_valid(query: string): void {
   const max_url_length = 2048;
@@ -119,7 +119,7 @@ function max_results_and_searchsuggestions(maxResults: number, searchSuggestions
   }
 }
 
-export function searchbox_has_valid_props(props: SearchboxOptions): void {
+export function searchcontainer_has_valid_props(props: SearchboxOptions): void {
   const {
     query = '',
     searchSuggestions = [],
@@ -141,7 +141,7 @@ export function searchbox_has_valid_props(props: SearchboxOptions): void {
   max_results_and_searchsuggestions(maxResults, searchSuggestions);
 }
 
-function api_key_is_valid(key: string): void {
+export function api_key_is_valid(key: string): void {
   if (key === null) {
     throw new Error('API_KEY can not be null');
   }
@@ -163,27 +163,4 @@ function api_key_is_valid(key: string): void {
   if (nr_of_words > 1) {
     throw new Error('API_KEY can not be multiple words');
   }
-}
-
-export function searchbar_has_valid_props(props: SearchbarOptions) {
-  const {
-    API_KEY,
-    query = '',
-    placeholder = 'Search on Gowiz',
-    maxResults = 10,
-    searchSuggestions = [],
-    searchDomains = [],
-  } = props;
-
-  api_key_is_valid(API_KEY);
-
-  const searchbox_props = {
-    query: query,
-    searchSuggestions: searchSuggestions,
-    searchDomains: searchDomains,
-    placeholder: placeholder,
-    maxResults: maxResults,
-  };
-
-  return searchbox_has_valid_props(searchbox_props);
 }
