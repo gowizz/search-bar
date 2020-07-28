@@ -1,8 +1,9 @@
 import React from 'react';
 import { SearchResult } from '../models/model';
-import { getQueryAndToken, getSearchResults } from '../util/request';
 import SearchContainer from './searchcontainer';
 import { api_key_is_valid } from '../util/component_validation';
+import { getSearchResults } from '../util/request';
+import { getQueryAndToken } from '../util/searchcontainer_util';
 
 export interface SearchbarOptions {
   onSubmit: (results: SearchResult[]) => void;
