@@ -4,19 +4,7 @@ import { isMobile } from 'react-device-detect';
 import { getSearchTermsInLocalStorage, searchTermInLocalStorage } from '../util/storage';
 import { getHighlightParts } from '../util/highlight';
 import shallowCompare from 'react-addons-shallow-compare';
-
-interface ResultsProps {
-  query: string;
-  onSelect: (event: any) => void;
-  onClick: (str: string) => void;
-  onRemove: (str: string) => void;
-  results: string[];
-  showResultsSearchIcon: boolean;
-  useCashing: boolean;
-  useDarkTheme: boolean;
-  hasSearched: boolean;
-  maxResults: number;
-}
+import { ResultsProps } from '../models/model';
 
 const InLocalStorage: FunctionComponent<{
   showResultsSearchIcon: boolean;
@@ -25,7 +13,7 @@ const InLocalStorage: FunctionComponent<{
   result: string;
 }> = ({ showResultsSearchIcon, useCashing, useDarkTheme = false, result }) => {
   const classname = useDarkTheme ? 'result_icon dark_result_icon' : 'result_icon';
-  if (showResultsSearchIcon === false) {
+  if (!showResultsSearchIcon) {
     return <div className={classname} />;
   }
   const icon =
@@ -52,6 +40,7 @@ const Highlight: FunctionComponent<{ text: string; query: string }> = ({ text, q
     </span>
   );
 };
+
 const SecondaryActionClass: FunctionComponent<{
   tabIndexStart: number;
   result: string;
@@ -96,7 +85,7 @@ const SecondaryActionClass: FunctionComponent<{
 };
 
 export default class Results extends React.Component<ResultsProps> {
-  shouldComponentUpdate(nextProps: Readonly<ResultsProps>, nextState: Readonly<{}>, nextContext: any): boolean {
+  shouldComponentUpdate(nextProps: Readonly<ResultsProps>, nextState: Readonly<{}>): boolean {
     if (this.props.query !== nextProps.query) {
       return true;
     } else if (nextProps.results != this.props.results) {
@@ -119,6 +108,7 @@ export default class Results extends React.Component<ResultsProps> {
       }
       return 'highlight_search_suggestion';
     }
+
     if (this.props.useDarkTheme) {
       return 'dark_search_suggestion';
     }
