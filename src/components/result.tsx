@@ -4,7 +4,19 @@ import { isMobile } from 'react-device-detect';
 import { getSearchTermsInLocalStorage, searchTermInLocalStorage } from '../util/storage';
 import { getHighlightParts } from '../util/highlight';
 import shallowCompare from 'react-addons-shallow-compare';
-import { ResultsProps } from '../models/model';
+
+export interface ResultsProps {
+  query: string;
+  onSelect: (event: any) => void;
+  onClick: (str: string) => void;
+  onRemove: (str: string) => void;
+  results: string[];
+  showResultsSearchIcon: boolean;
+  useCashing: boolean;
+  useDarkTheme: boolean;
+  hasSearched: boolean;
+  maxResults: number;
+}
 
 const InLocalStorage: FunctionComponent<{
   showResultsSearchIcon: boolean;
