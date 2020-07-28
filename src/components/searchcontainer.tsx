@@ -7,6 +7,8 @@ import { HiddenInput } from './hidden_input';
 import Input from './input';
 import Results from './result';
 import { searchcontainer_has_valid_props } from '../util/component_validation';
+import Fuse from 'fuse.js';
+import { getAutoCompleteValues } from '../util/searchcontainer_util';
 
 export interface SearchContainerOptions {
   onSubmit: (event: any) => void;
@@ -15,7 +17,7 @@ export interface SearchContainerOptions {
   useCaching?: boolean;
   showInputSearchIcon?: boolean;
   showResultsSearchIcon?: boolean;
-  useAutoComplete?: boolean;
+  useAutoComplete?: boolean; // do you want to fetch results from Gowiz?
   useDarkTheme?: boolean;
   useAutoFocus?: boolean;
   maxResults?: number;
@@ -26,7 +28,7 @@ export interface SearchContainerOptions {
 interface SearchContainerState {
   query: string;
   results: string[];
-  useAutoComplete: boolean;
+  showSearchResults: boolean;
   highlight_query_index: number;
   hasSearched: boolean;
 }
@@ -40,10 +42,7 @@ export default class SearchContainer extends React.PureComponent<SearchContainer
     this.state = {
       query: this.props.query ? this.props.query : '',
       results: this.initialResults(),
-      useAutoComplete:
-        this.props.useAutoComplete === null || this.props.useAutoComplete === undefined
-          ? true
-          : this.props.useAutoComplete,
+      showSearchResults: true,
       highlight_query_index: -1,
       hasSearched: false,
     };
@@ -51,9 +50,7 @@ export default class SearchContainer extends React.PureComponent<SearchContainer
     this.handleOnChange = this.handleOnChange.bind(this);
     this.handleOnCancel = this.handleOnCancel.bind(this);
     this.handleOnKey = this.handleOnKey.bind(this);
-
     this.handleSearchSuggestionRemove = this.handleSearchSuggestionRemove.bind(this);
-
     this.handleOnToSearchBarClick = this.handleOnToSearchBarClick.bind(this);
 
     this.result_ref = React.createRef();
@@ -72,22 +69,62 @@ export default class SearchContainer extends React.PureComponent<SearchContainer
     return searchSuggestions.slice(0, maxResults);
   }
 
-  handleOnChange(event: any): void {
-    event.preventDefault();
+  getAutoCompleteStatus(): boolean {
+    return this.props.useAutoComplete !== false;
+  }
 
-    const { hasSearched } = this.state;
-    const new_query = event.target.value;
+  handleOnChange(new_query: string): void {
+    const { hasSearched, results } = this.state;
+    const useAutoComplete = this.getAutoCompleteStatus();
 
-    if (!hasSearched) {
-      this.setState({
-        query: new_query,
-        hasSearched: true,
-      });
-    } else {
-      this.setState({
-        query: new_query,
+    let newResults;
+
+    if (useAutoComplete && navigator.onLine) {
+      newResults = getAutoCompleteValues(new_query);
+    }
+
+    const useFuseSearch =
+      newResults == null || false || newResults.length === 0 ? true : !useAutoComplete || !navigator.onLine;
+    if (useFuseSearch) {
+      const fuse = new Fuse(results);
+      newResults = fuse.search(new_query).map(function (x) {
+        return x.item;
       });
     }
+    const updateResults = newResults !== results;
+    const setShowSearchResultToFalse = new_query.length === 0;
+
+    let stateUpdate = {
+      hasSearched: undefined,
+      results: undefined,
+      query: new_query,
+      showSearchResults: undefined,
+    };
+
+    if (!hasSearched) {
+      stateUpdate.hasSearched = true;
+    }
+    if (updateResults) {
+      stateUpdate.results = newResults;
+    }
+
+    if (setShowSearchResultToFalse) {
+      if (this.state.showSearchResults === true) {
+        stateUpdate.showSearchResults = false;
+      }
+    } else {
+      if (this.state.showSearchResults === false) {
+        stateUpdate.showSearchResults = true;
+      }
+    }
+
+    Object.keys(stateUpdate).forEach((key) => {
+      if (stateUpdate[key] === undefined) {
+        delete stateUpdate[key];
+      }
+    });
+
+    this.setState(stateUpdate);
   }
 
   handleOnCancel(event: any): void {
@@ -102,6 +139,11 @@ export default class SearchContainer extends React.PureComponent<SearchContainer
   }
 
   handleOnKey(event) {
+    const specialKeys = ['Enter', 'ArrowUp', 'ArrowDown', 'Escape'];
+    if (!specialKeys.includes(event.key)) {
+      return;
+    }
+
     switch (event.key) {
       case 'Enter':
         event.preventDefault();
@@ -145,10 +187,10 @@ export default class SearchContainer extends React.PureComponent<SearchContainer
       case 'Escape':
         event.preventDefault();
 
-        const should_trigger_state_change = this.state.results.length > 0 && this.state.useAutoComplete;
+        const should_trigger_state_change = this.state.results.length > 0 && this.state.showSearchResults;
 
         if (should_trigger_state_change) {
-          this.setState({ useAutoComplete: false });
+          this.setState({ showSearchResults: false });
         }
         break;
       default:
@@ -164,9 +206,11 @@ export default class SearchContainer extends React.PureComponent<SearchContainer
   }
 
   handleOnToSearchBarClick(str: string) {
-    this.setState({
-      query: str,
-    });
+    if (this.state.query != str) {
+      this.setState({
+        query: str,
+      });
+    }
   }
 
   componentDidMount() {
@@ -188,10 +232,10 @@ export default class SearchContainer extends React.PureComponent<SearchContainer
       maxResults = 10,
       onSubmit,
     } = this.props;
-    const { results, query, hasSearched, useAutoComplete } = this.state;
+    let { results, query, hasSearched, showSearchResults } = this.state;
 
     const results_should_render =
-      results !== undefined && results.length > 0 && hasSearched && useAutoComplete && query.length > 0;
+      results !== undefined && results.length > 0 && hasSearched && showSearchResults && query.length > 0;
 
     const container_class = useDarkTheme ? 'gowiz_searchbar_container dark_container' : 'gowiz_searchbar_container';
 
@@ -243,3 +287,4 @@ export default class SearchContainer extends React.PureComponent<SearchContainer
 //TODO: handle click outside of the search bar are
 //TODO: double click on input should show last 10 historic searches is autofocus is not enabled
 //TODO: if props does not use autocomplete, then results are adjusted using fuse search
+//TODO: we should get prefetched fusesearch results from localstorage

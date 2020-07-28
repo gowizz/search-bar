@@ -4,7 +4,7 @@ import { CancelIcon, SearchIcon } from '../assets/icons';
 export interface InputProps {
   query?: string;
   placeholder?: string;
-  onChange: (e: any) => void;
+  onChange: (str: string) => void;
   onCancel: (e: any) => void;
   showInputSearchIcon?: boolean;
   useAutoFocus?: boolean;
@@ -59,7 +59,7 @@ export default class Input extends React.PureComponent<InputProps> {
       default:
         placeholder = this.props.placeholder;
     }
-    const query = this.props.query === undefined || this.props.query === null ? '' : this.props.query.trim();
+    const query = this.props.query === undefined || this.props.query === null ? '' : this.props.query;
     const title = query.length === 0 ? 'Search on Gowiz' : 'Search ' + query + ' on Gowiz';
 
     const container_class = useDarkTheme ? 'search_input dark_input' : 'search_input';
@@ -71,9 +71,9 @@ export default class Input extends React.PureComponent<InputProps> {
           <input
             data-testid={'search_input_input'}
             spellCheck={true}
-            value={query}
+            defaultValue={query}
             placeholder={placeholder}
-            onChange={(e) => onChange(e)}
+            onChange={(e) => onChange(e.target.value)}
             autoComplete="off"
             name="query"
             type="text"

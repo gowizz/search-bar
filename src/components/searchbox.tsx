@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { getQueryAndToken, goToGowiz } from '../util/request';
-
 import SearchContainer from './searchcontainer';
+import { getQueryAndToken } from '../util/searchcontainer_util';
+import { goToGowiz } from '../util/request';
 
 export interface SearchboxOptions {
   query?: string;
@@ -49,7 +49,7 @@ export default class Searchbox extends React.PureComponent<SearchboxOptions> {
       useAutoFocus = false,
       useDarkTheme = false,
       maxResults = 10,
-      useAutoComplete,
+      useAutoComplete = true,
       searchSuggestions,
       searchDomains,
     } = this.props;

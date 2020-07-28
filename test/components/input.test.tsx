@@ -154,7 +154,7 @@ describe('Input', () => {
 
     it('First space bar in query is treated correctly', async () => {
       let { container, queryByTestId } = render(<Input query={'          '} onChange={onChange} onCancel={onCancel} />);
-      expect(container.childNodes.length).toBe(2);
+      expect(container.childNodes.length).toBe(3);
 
       const input_class = container.childNodes[1];
 
@@ -166,8 +166,8 @@ describe('Input', () => {
       const value = input.getAttribute('value');
       const title = input.getAttribute('title');
 
-      expect(value).toBe('');
-      expect(title).toBe('Search on Gowiz');
+      expect(value).toBe('          ');
+      expect(title).toBe('Search            on Gowiz');
     });
   });
 
