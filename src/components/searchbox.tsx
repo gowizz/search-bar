@@ -4,7 +4,6 @@ import { addSearchTermToLocalStorage, removeSearchTermFromLocalStorage } from '.
 import { goToGowiz } from '../util/request';
 
 import { HiddenInput } from './hidden_input';
-import shallowCompare from 'react-addons-shallow-compare';
 
 import Input from './input';
 import Results from './result';
@@ -12,14 +11,14 @@ import { SearchboxOptions } from '../models/model';
 import { searchbox_has_valid_props } from '../util/component_validation';
 
 interface SearchboxState {
-  query: string; // the query we want to start searching for
+  query: string;
   results: string[];
   useAutoComplete: boolean;
   highlight_query_index: number;
   hasSearched: boolean;
 }
 
-export default class Searchbox extends React.Component<SearchboxOptions, SearchboxState> {
+export default class Searchbox extends React.PureComponent<SearchboxOptions, SearchboxState> {
   private readonly result_ref: React.RefObject<Results>;
 
   constructor(props: SearchboxOptions) {
@@ -86,78 +85,26 @@ export default class Searchbox extends React.Component<SearchboxOptions, Searchb
   handleOnChange(event: any): void {
     event.preventDefault();
 
-    const { hasSearched, useAutoComplete } = this.state;
-
-    const user_has_not_searched_and_we_use_autocomplete = !hasSearched && useAutoComplete;
-    const user_has_not_searched_and_we_do_not_use_autocomplete = !hasSearched && !useAutoComplete;
-
-    const user_has_searched_and_we_use_autocomplete = hasSearched && useAutoComplete;
-    const user_has_searched_and_we_not_use_autocomplete = hasSearched && !useAutoComplete;
-
-    const should_reset_highlight_index = this.state.highlight_query_index != -1;
-
+    const { hasSearched } = this.state;
     const new_query = event.target.value;
-    //TODO: this if statmenet should be simplified
 
-    if (user_has_not_searched_and_we_do_not_use_autocomplete) {
-      if (should_reset_highlight_index) {
-        this.setState({
-          query: new_query,
-          hasSearched: true,
-          highlight_query_index: -1,
-        });
-      } else {
-        this.setState({
-          query: event.target.value,
-          hasSearched: true,
-        });
-      }
-    } else if (user_has_not_searched_and_we_use_autocomplete) {
-      if (should_reset_highlight_index) {
-        this.setState({
-          query: new_query,
-          hasSearched: true,
-          highlight_query_index: -1,
-          useAutoComplete: false,
-        });
-      } else {
-        this.setState({
-          query: event.target.value,
-          hasSearched: true,
-          useAutoComplete: false,
-        });
-      }
-    } else if (user_has_searched_and_we_not_use_autocomplete) {
-      if (should_reset_highlight_index) {
-        this.setState({
-          query: new_query,
-          highlight_query_index: -1,
-        });
-      } else {
-        this.setState({
-          query: event.target.value,
-        });
-      }
-    } else if (user_has_searched_and_we_use_autocomplete) {
-      if (should_reset_highlight_index) {
-        this.setState({
-          query: new_query,
-          highlight_query_index: -1,
-          useAutoComplete: false,
-        });
-      } else {
-        this.setState({
-          query: event.target.value,
-          useAutoComplete: false,
-        });
-      }
+    if (!hasSearched) {
+      this.setState({
+        query: new_query,
+        hasSearched: true,
+      });
+    } else {
+      this.setState({
+        query: new_query,
+      });
     }
   }
 
   handleOnCancel(event: any): void {
     event.preventDefault();
+    const { highlight_query_index } = this.state;
 
-    if (this.state.highlight_query_index != -1) {
+    if (highlight_query_index != -1) {
       this.setState({ query: '', useAutoComplete: false, highlight_query_index: -1 });
     } else {
       this.setState({ query: '', useAutoComplete: false });
@@ -247,10 +194,6 @@ export default class Searchbox extends React.Component<SearchboxOptions, Searchb
     document.removeEventListener('keydown', this.handleOnKey, false);
   }
 
-  shouldComponentUpdate(nextProps: Readonly<SearchboxOptions>, nextState: Readonly<SearchboxState>): boolean {
-    return shallowCompare(this, nextProps, nextState);
-  }
-
   render() {
     const {
       placeholder = 'Search on Gowiz',
@@ -263,7 +206,8 @@ export default class Searchbox extends React.Component<SearchboxOptions, Searchb
     } = this.props;
     const { results, query, hasSearched, useAutoComplete } = this.state;
 
-    const results_should_render = results != undefined && results.length > 0 && hasSearched && useAutoComplete;
+    const results_should_render =
+      results !== undefined && results.length > 0 && hasSearched && useAutoComplete && query.length > 0;
 
     const container_class = useDarkTheme ? 'gowiz_searchbar_container dark_container' : 'gowiz_searchbar_container';
 
