@@ -3,7 +3,7 @@ import { cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
 import * as val from '../../src/util/component_validation';
-import { SearchbarOptions, SearchboxOptions } from '../../src/models/model';
+import { SearchboxOptions } from '../../src/components/searchbox';
 
 describe('Input validation', () => {
   afterEach(cleanup);
@@ -16,20 +16,20 @@ describe('Input validation', () => {
         query: '',
       };
 
-      expect(val.searchbox_has_valid_props(props)).toBe(undefined);
+      expect(val.searchcontainer_has_valid_props(props)).toBe(undefined);
 
       props = {
         query: 'test',
       };
 
-      expect(val.searchbox_has_valid_props(props)).toBe(undefined);
+      expect(val.searchcontainer_has_valid_props(props)).toBe(undefined);
 
       props = {
         query: '<script>alert("hi")</script>',
       };
 
       expect(() => {
-        val.searchbox_has_valid_props(props);
+        val.searchcontainer_has_valid_props(props);
       }).toThrow('<script>alert("hi")</script> is not a valid query as it contains HTML tags');
 
       props = {
@@ -37,7 +37,7 @@ describe('Input validation', () => {
       };
 
       expect(() => {
-        val.searchbox_has_valid_props(props);
+        val.searchcontainer_has_valid_props(props);
       }).toThrow('<b>test</b> is not a valid query as it contains HTML tags');
 
       let my_query = '';
@@ -53,7 +53,7 @@ describe('Input validation', () => {
       };
 
       expect(() => {
-        val.searchbox_has_valid_props(props);
+        val.searchcontainer_has_valid_props(props);
       }).toThrow('The entered query is too long');
 
       my_query = '';
@@ -66,7 +66,7 @@ describe('Input validation', () => {
         query: my_query,
       };
 
-      expect(val.searchbox_has_valid_props(props)).toBe(undefined);
+      expect(val.searchcontainer_has_valid_props(props)).toBe(undefined);
 
       my_query = '';
 
@@ -79,7 +79,7 @@ describe('Input validation', () => {
       };
 
       expect(() => {
-        val.searchbox_has_valid_props(props);
+        val.searchcontainer_has_valid_props(props);
       }).toThrow('The entered query is too long');
 
       props = {
@@ -92,20 +92,20 @@ describe('Input validation', () => {
         placeholder: '',
       };
 
-      expect(val.searchbox_has_valid_props(props)).toBe(undefined);
+      expect(val.searchcontainer_has_valid_props(props)).toBe(undefined);
 
       props = {
         placeholder: 'Hello',
       };
 
-      expect(val.searchbox_has_valid_props(props)).toBe(undefined);
+      expect(val.searchcontainer_has_valid_props(props)).toBe(undefined);
 
       props = {
         placeholder: '<script>alert("hi")</script>',
       };
 
       expect(() => {
-        val.searchbox_has_valid_props(props);
+        val.searchcontainer_has_valid_props(props);
       }).toThrow('<script>alert("hi")</script> is not a valid placeholder as it contains HTML tags');
 
       props = {
@@ -113,7 +113,7 @@ describe('Input validation', () => {
       };
 
       expect(() => {
-        val.searchbox_has_valid_props(props);
+        val.searchcontainer_has_valid_props(props);
       }).toThrow('<b>test</b> is not a valid placeholder as it contains HTML tags');
 
       let my_placeholder = '';
@@ -129,7 +129,7 @@ describe('Input validation', () => {
       };
 
       expect(() => {
-        val.searchbox_has_valid_props(props);
+        val.searchcontainer_has_valid_props(props);
       }).toThrow('Entered placeholder it too long. Maximum placeholder size is 150 characters');
 
       my_placeholder = '';
@@ -142,7 +142,7 @@ describe('Input validation', () => {
         placeholder: my_placeholder,
       };
 
-      expect(val.searchbox_has_valid_props(props)).toBe(undefined);
+      expect(val.searchcontainer_has_valid_props(props)).toBe(undefined);
     });
 
     it('Search suggestions are validated correctly', async () => {
@@ -150,13 +150,13 @@ describe('Input validation', () => {
         searchSuggestions: [],
       };
 
-      expect(val.searchbox_has_valid_props(props)).toBe(undefined);
+      expect(val.searchcontainer_has_valid_props(props)).toBe(undefined);
 
       props = {
         searchSuggestions: ['test'],
       };
 
-      expect(val.searchbox_has_valid_props(props)).toBe(undefined);
+      expect(val.searchcontainer_has_valid_props(props)).toBe(undefined);
 
       const queries = [
         [
@@ -217,7 +217,7 @@ describe('Input validation', () => {
           searchSuggestions: query,
         };
         expect(() => {
-          val.searchbox_has_valid_props(props);
+          val.searchcontainer_has_valid_props(props);
         }).toThrow(response);
       }
     });
@@ -227,13 +227,13 @@ describe('Input validation', () => {
         searchDomains: [],
       };
 
-      expect(val.searchbox_has_valid_props(props)).toBe(undefined);
+      expect(val.searchcontainer_has_valid_props(props)).toBe(undefined);
 
       props = {
         searchDomains: ['https://example.com'],
       };
 
-      expect(val.searchbox_has_valid_props(props)).toBe(undefined);
+      expect(val.searchcontainer_has_valid_props(props)).toBe(undefined);
 
       const queries = [
         [
@@ -299,7 +299,7 @@ describe('Input validation', () => {
           searchDomains: query,
         };
         expect(() => {
-          val.searchbox_has_valid_props(props);
+          val.searchcontainer_has_valid_props(props);
         }).toThrow(response);
       }
     });
@@ -309,13 +309,13 @@ describe('Input validation', () => {
         maxResults: 3,
       };
 
-      expect(val.searchbox_has_valid_props(props)).toBe(undefined);
+      expect(val.searchcontainer_has_valid_props(props)).toBe(undefined);
 
       props = {
         maxResults: 25,
       };
 
-      expect(val.searchbox_has_valid_props(props)).toBe(undefined);
+      expect(val.searchcontainer_has_valid_props(props)).toBe(undefined);
 
       const queries = [-2, 26];
       const responses = [
@@ -331,7 +331,7 @@ describe('Input validation', () => {
           maxResults: query,
         };
         expect(() => {
-          val.searchbox_has_valid_props(props);
+          val.searchcontainer_has_valid_props(props);
         }).toThrow(response);
       }
 
@@ -340,7 +340,7 @@ describe('Input validation', () => {
         searchSuggestions: ['test'],
       };
       expect(() => {
-        val.searchbox_has_valid_props(new_props);
+        val.searchcontainer_has_valid_props(new_props);
       }).toThrow('Maximum results size can not be zero if search suggestions are provided');
 
       new_props = {
@@ -348,11 +348,11 @@ describe('Input validation', () => {
         searchSuggestions: [],
       };
 
-      expect(val.searchbox_has_valid_props(new_props)).toBe(undefined);
+      expect(val.searchcontainer_has_valid_props(new_props)).toBe(undefined);
     });
 
     it('Default props do not cause an error', async () => {
-      expect(val.searchbox_has_valid_props(defaultProps)).toBe(undefined);
+      expect(val.searchcontainer_has_valid_props(defaultProps)).toBe(undefined);
     });
 
     it('Valid props do not cause an error', async () => {
@@ -368,19 +368,15 @@ describe('Input validation', () => {
         searchSuggestions: ['testing component'],
         searchDomains: ['testing.org'],
       };
-      expect(val.searchbox_has_valid_props(props)).toBe(undefined);
+      expect(val.searchcontainer_has_valid_props(props)).toBe(undefined);
     });
   });
 
   describe('Searchbar', () => {
     it('API_KEY is validated correctly', async () => {
-      const onSubmit = jest.fn();
-      let props: SearchbarOptions = {
-        onSubmit: onSubmit,
-        API_KEY: '1234567891011',
-      };
+      let API_KEY = '1234567891011';
 
-      expect(val.searchbar_has_valid_props(props)).toBe(undefined);
+      expect(val.api_key_is_valid(API_KEY)).toBe(undefined);
 
       const queries = [null, undefined, '', 'api key', ' 1234567891011 '];
       const responses = [
@@ -395,42 +391,12 @@ describe('Input validation', () => {
         const query = queries[i];
 
         const response = responses[i];
-        props = {
-          onSubmit: onSubmit,
-          API_KEY: query,
-        };
+        API_KEY = query;
 
         expect(() => {
-          val.searchbar_has_valid_props(props);
+          val.api_key_is_valid(API_KEY);
         }).toThrow(response);
       }
-    });
-
-    const defaultProps: SearchbarOptions = {
-      API_KEY: '1234567891011',
-      onSubmit: jest.fn(),
-    };
-
-    it('Default props do not cause an error', async () => {
-      expect(val.searchbar_has_valid_props(defaultProps)).toBe(undefined);
-    });
-
-    it('Valid props do not cause an error', async () => {
-      const props: SearchbarOptions = {
-        API_KEY: '1234567891011',
-        onSubmit: jest.fn(),
-        query: 'Testing',
-        placeholder: 'Search',
-        useCaching: true,
-        showInputSearchIcon: true,
-        showResultsSearchIcon: true,
-        useAutoComplete: true,
-        useAutoFocus: true,
-        maxResults: 3,
-        searchSuggestions: ['testing component'],
-        searchDomains: ['testing.org'],
-      };
-      expect(val.searchbar_has_valid_props(props)).toBe(undefined);
     });
   });
 });
