@@ -1,6 +1,6 @@
 import { domain_to_host, reformat_url, url_is_valid } from './string_util';
 import { getInputSessionToken, removeInputSessionToken } from './storage';
-import { SearchResult } from '../models/model';
+import { SearchRequest } from '../models/model';
 
 const axios = require('axios');
 
@@ -76,10 +76,42 @@ export function goToGowiz(user_query: string, token: string, pre_defined_domains
   }
 }
 
-export function getSearchResults(sessionToken: string, query: string, API_KEY: string): SearchResult[] {
+// @ts-ignore
+export function getSearchResults(token: string, query: string, API_KEY: string): SearchRequest {
+  const session_token_from_storage = getInputSessionToken();
+
+  if (session_token_from_storage != token) {
+    removeInputSessionToken();
+    return null;
+  }
+  removeInputSessionToken();
+
   //TODO: implement
-  console.log('Sending search request to the api with token:' + sessionToken + ' query' + query + 'API_KEY' + API_KEY);
-  return [];
+
+  return {
+    status: 'success',
+    duration: 1300,
+    data: [
+      {
+        title: 'Example domain',
+        url: 'https://example.org',
+        meta: 'Example Domain. This domain is for use in illustrative examples in documents. ...',
+        favicon: 'https://example.org/favicon.ico',
+      },
+      {
+        title: 'Example domain 2',
+        url: 'https://example.com',
+        meta: 'Example Domain. This domain is for use in illustrative examples in documents. ...',
+        favicon: 'https://example.org/favicon.ico',
+      },
+      {
+        title: 'Example domain 3',
+        url: 'https://example.io',
+        meta: 'Example Domain. This domain is for use in illustrative examples in documents. ...',
+        favicon: 'https://example.org/favicon.ico',
+      },
+    ],
+  };
 }
 
 export const fetch_GET = async (url: string, timout_in_seconds: number) => {
