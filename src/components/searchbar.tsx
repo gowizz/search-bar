@@ -1,12 +1,11 @@
 import React from 'react';
-import { SearchResult } from '../models/model';
 import SearchContainer from './searchcontainer';
 import { api_key_is_valid } from '../util/component_validation';
 import { getSearchResults } from '../util/request';
 import { getQueryAndToken } from '../util/searchcontainer_util';
 
 export interface SearchbarOptions {
-  onSubmit: (results: SearchResult[]) => void;
+  onSubmit: (response) => void;
   API_KEY: string;
   query?: string;
   placeholder?: string;
@@ -21,7 +20,7 @@ export interface SearchbarOptions {
   searchDomains?: string[];
 }
 
-export default class SearchBar extends React.Component<SearchbarOptions> {
+export default class Searchbar extends React.Component<SearchbarOptions> {
   constructor(props) {
     super(props);
     this.handleOnSubmit = this.handleOnSubmit.bind(this);
