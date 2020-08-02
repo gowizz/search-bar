@@ -1,12 +1,19 @@
 import { reformatQueryForSearch } from './string_util';
 
 export function getHighlightParts(text: string, query: string): string[] {
-  if (text === undefined || query === undefined) {
+  const textLength = text === null || text === undefined ? 0 : text.length;
+  const queryLength = query === null || query === undefined ? 0 : query.length;
+
+  if (queryLength < 1) {
+    if (textLength > 0) {
+      return [text];
+    }
     return [];
   }
-  if (text.length < 1 || query.length < 1) {
+  if (textLength < 0) {
     return [];
   }
+
   text = reformatQueryForSearch(text);
   query = reformatQueryForSearch(query);
 
