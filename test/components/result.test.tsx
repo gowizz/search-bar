@@ -2,7 +2,7 @@ import React from 'react';
 
 import '@testing-library/jest-dom/extend-expect';
 import { cleanup, fireEvent, render } from '@testing-library/react';
-import { Highlight, InLocalStorage, SecondaryActionClass } from '../../src/components/result';
+import Results, { Highlight, InLocalStorage, SecondaryActionClass } from '../../src/components/result';
 import * as locs from '../../src/util/storage';
 
 describe('Result', () => {
@@ -13,6 +13,7 @@ describe('Result', () => {
 
   const onClick = jest.fn();
   const onRemove = jest.fn();
+  const onSelect = jest.fn();
 
   describe('Action buttons', () => {
     it('In local storage is not present when needed to', async () => {
@@ -108,6 +109,97 @@ describe('Result', () => {
       expect(highlight_word === null).toBe(false);
       const highlight_play = getByText('play');
       expect(highlight_play === null).toBe(false);
+    });
+  });
+
+  describe('Result component', () => {
+    it('No results values render null', async () => {
+      let { container } = render(<Results onClick={onClick} onRemove={onRemove} onSelect={onSelect} />);
+      expect(container.firstChild == null).toBe(true);
+    });
+    it('Localstorage is called when query is null', async () => {
+      locs.addSearchTermToLocalStorage('test');
+      locs.addSearchTermToLocalStorage('word');
+      locs.addSearchTermToLocalStorage('play');
+      let { container, getByText } = render(
+        <Results useCashing={true} hasSearched={true} onClick={onClick} onRemove={onRemove} onSelect={onSelect} />
+      );
+      expect(container.childNodes.length).toBe(2);
+
+      const secondChild = container.childNodes[1];
+      expect(secondChild.childNodes.length).toBe(3);
+
+      const test = getByText('test');
+      const word = getByText('word');
+      const play = getByText('play');
+      expect(test).toBeInTheDocument();
+      expect(word).toBeInTheDocument();
+      expect(play).toBeInTheDocument();
+    });
+
+    it('No highlighted results are rendered correctly', async () => {
+      let { container, getByText } = render(
+        <Results
+          results={['test', 'word', 'play', 'node', 'math']}
+          useCashing={true}
+          hasSearched={true}
+          onClick={onClick}
+          onRemove={onRemove}
+          onSelect={onSelect}
+        />
+      );
+      expect(container.childNodes.length).toBe(2);
+
+      const secondChild = container.childNodes[1];
+      expect(secondChild.childNodes.length).toBe(5);
+
+      const test = getByText('test');
+      const word = getByText('word');
+      const play = getByText('play');
+      const node = getByText('node');
+      const math = getByText('math');
+      expect(test).toBeInTheDocument();
+      expect(word).toBeInTheDocument();
+      expect(play).toBeInTheDocument();
+      expect(node).toBeInTheDocument();
+      expect(math).toBeInTheDocument();
+    });
+    it('Highlighted results are rendered correctly', async () => {
+      let { container, getByText } = render(
+        <Results
+          results={['wordplay', 'test', 'math']}
+          query={'word'}
+          useCashing={true}
+          hasSearched={true}
+          onClick={onClick}
+          onRemove={onRemove}
+          onSelect={onSelect}
+        />
+      );
+      expect(container.childNodes.length).toBe(2);
+
+      const secondChild = container.childNodes[1];
+      expect(secondChild.childNodes.length).toBe(3);
+
+      const wordComponent = secondChild.childNodes[1];
+      const word = getByText('word');
+      const play = getByText('play');
+
+      expect(wordComponent.childNodes.length).toBe(3);
+      expect(word).toBeInTheDocument();
+      expect(play).toBeInTheDocument();
+
+      const testComponent = secondChild.childNodes[1];
+      const test = getByText('test');
+
+      expect(testComponent.childNodes.length).toBe(3);
+      expect(test).toBeInTheDocument();
+
+      const mathComponent = secondChild.childNodes[1];
+      const math = getByText('math');
+
+      expect(mathComponent.childNodes.length).toBe(3);
+      expect(math).toBeInTheDocument();
     });
   });
 });

@@ -6,16 +6,16 @@ import { getHighlightParts } from '../util/highlight';
 import shallowCompare from 'react-addons-shallow-compare';
 
 export interface ResultsProps {
-  query: string;
+  query?: string;
   onSelect: (event: any) => void;
   onClick: (str: string) => void;
   onRemove: (str: string) => void;
-  results: string[];
-  showResultsSearchIcon: boolean;
-  useCashing: boolean;
-  useDarkTheme: boolean;
-  hasSearched: boolean;
-  maxResults: number;
+  results?: string[];
+  showResultsSearchIcon?: boolean;
+  useCashing?: boolean;
+  useDarkTheme?: boolean;
+  hasSearched?: boolean;
+  maxResults?: number;
 }
 
 export const InLocalStorage: FunctionComponent<{
@@ -106,7 +106,7 @@ export default class Results extends React.Component<ResultsProps> {
   }
 
   getListElementClass(result: string): string {
-    const value_is_equal = this.props.query.valueOf() === result.valueOf();
+    const value_is_equal = this.props.query === result;
     if (value_is_equal) {
       if (this.props.useDarkTheme) {
         return 'dark_highlight_search_suggestion';
@@ -122,24 +122,28 @@ export default class Results extends React.Component<ResultsProps> {
 
   render() {
     let {
-      query,
+      query = '',
       onSelect,
       onRemove,
       onClick,
-      showResultsSearchIcon,
-      useCashing,
-      useDarkTheme,
-      hasSearched,
-      results,
-      maxResults,
+      showResultsSearchIcon = true,
+      useCashing = true,
+      useDarkTheme = false,
+      hasSearched = false,
+      results = [],
+      maxResults = 10,
     } = this.props;
 
-    let my_results = results;
-    if (my_results == null || my_results.length < 1) {
-      if (useCashing && (query == null || query.length == 0) && hasSearched) {
-        my_results = getSearchTermsInLocalStorage();
+    let myResults = results;
+    let myResultsLength = myResults == null ? 0 : myResults.length;
+    let queryLength = query == null ? 0 : query.length;
+
+    if (myResultsLength < 1) {
+      if (useCashing && queryLength == 0 && hasSearched) {
+        myResults = getSearchTermsInLocalStorage();
+        myResultsLength = myResults.length;
       }
-      if (my_results == null || my_results.length < 1) {
+      if (myResultsLength < 1) {
         return null;
       }
     }
@@ -151,7 +155,7 @@ export default class Results extends React.Component<ResultsProps> {
       onClick: onClick,
       showResultsSearchIcon: showResultsSearchIcon,
       useCashing: useCashing,
-      results: my_results,
+      results: myResults,
       maxResults: maxResults,
       hasSearched: hasSearched,
     };
@@ -164,7 +168,7 @@ export default class Results extends React.Component<ResultsProps> {
       <>
         <div className="input_to_results" />
         <ul>
-          {my_results.map((result, index) => (
+          {myResults.map((result, index) => (
             <li
               className={this.getListElementClass(result)}
               key={result}
