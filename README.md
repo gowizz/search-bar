@@ -1,4 +1,4 @@
-# Gowiz searchbar ![GitHub license](https://img.shields.io/badge/license-UNLICENSED-blue.svg)[![Actions Status](https://github.com/gowizz/SearchBar/workflows/Searchbar%20CI/badge.svg)](https://github.com/gowizz/SearchBar/actions)[![npm version](https://badge.fury.io/js/%40gowiz%2Fsearchbar.svg)](https://badge.fury.io/js/%40gowiz%2Fsearchbar)[![codecov](https://codecov.io/gh/gowizz/SearchBar/branch/master/graph/badge.svg?token=IH210HLBB1)](https://codecov.io/gh/gowizz/SearchBar)
+# Gowiz searchbar ![GitHub license](https://img.shields.io/badge/license-UNLICENSED-blue.svg)[![Actions Status](https://github.com/gowizz/SearchBar/workflows/Searchbar%20CI/badge.svg)](https://github.com/gowizz/SearchBar/actions)[![npm version](https://badge.fury.io/js/%40gowiz%2Fsearchbar.svg)](https://badge.fury.io/js/%40gowiz%2Fsearchbar)
 Gowiz search bars are highly customisable powerful components that can enhance your page experience and that respect the privacy of your users.
 
 ## Getting started
