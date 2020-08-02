@@ -4,3 +4,9 @@ export interface SearchResult {
   meta?: string;
   favicon?: string;
 }
+
+export interface SearchRequest {
+  status: string;
+  duration: number;
+  data: SearchResult[];
+}

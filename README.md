@@ -11,10 +11,10 @@ After that the following components will be available
 
 ```javascript
 // CommonJS
-const { Searchbox, GowizSearchBar } = require('@gowiz/searchbar');
+const { Searchbox, Searchbar } = require('@gowiz/searchbar');
 
 // ES6
-import { Searchbox, GowizSearchBar } from '@gowiz/searchbar';
+import { Searchbox, Searchbar } from '@gowiz/searchbar';
 ```
 
 ## Components
@@ -89,4 +89,63 @@ Actions allow the user to perform certain actions faster by utilizing the keyboa
 
 ### Search bar
 
-This component is accessible, but it has no legit functionality.
+From the UI perceptive search bar looks identical to the searchbox, but they have different functionality. The search bar
+allows you to harness the power of the Gowiz search engines, by accessing its search results. The users on your site can
+perform searches and retrieve answerer to them without ever leaving the site.
+
+#### Required arguments
+
+| Argument | Description                                                          |
+| -------- | -------------------------------------------------------------------- |
+| API_KEY  | A unique string that determines the author of the application        |
+| onSubmit | A function that handles the search results provided by the searchbar |
+
+To get your API_KEY, please send us an <a href="mailto:karl.gustav1789@gmail.com?subject=Searchbar%20API_KEY"> email</a>
+
+#### Example response
+
+```javascript
+  {
+      "status": "success",
+      "duration":1300,
+       "data": [
+               {
+                  "title": "Example domain",
+                  "url":"https://example.org",
+                  "meta":"Example Domain. This domain is for use in illustrative examples in documents. ...",
+                  "favicon":"https://example.org/favicon.ico"
+              },
+             ...
+          ]
+  }
+```
+
+The status indicated where the request was successful. If the API_KEY is valid and the application respects the agreement,
+then usually a response is present. The status is different, if the API_KEY is invalid or when then ther's an issue on
+our side.
+The duration measure the difference between the time the search request was sent and the time when request was sent from
+the server side. Duration is measured in milliseconds.
+The data field is a list of search results that were retried from the server. Every search result has a title and a URL
+and some of them have a meta description and a favicon.
+
+| Argument | Description                                                                          |
+| -------- | ------------------------------------------------------------------------------------ |
+| title    | The title of the search result                                                       |
+| url      | The url of the search result                                                         |
+| meta?    | A short description of the search result. This value can be null.                    |
+| favicon? | A small (16x16) image that's typically the logo of the search result. It can be null |
+
+#### Example implementation
+
+```javascript
+import { Searchbar } from '@gowiz/searchbar';
+
+const search_bar = (
+  <Searchbar
+    API_KEY={'MYAPIKEY'}
+    onSubmit={function onSubmit(response) {
+      console.log(response);
+    }}
+  />
+);
+```

@@ -6,19 +6,19 @@ import { getHighlightParts } from '../util/highlight';
 import shallowCompare from 'react-addons-shallow-compare';
 
 export interface ResultsProps {
-  query: string;
+  query?: string;
   onSelect: (event: any) => void;
   onClick: (str: string) => void;
   onRemove: (str: string) => void;
-  results: string[];
-  showResultsSearchIcon: boolean;
-  useCashing: boolean;
-  useDarkTheme: boolean;
-  hasSearched: boolean;
-  maxResults: number;
+  results?: string[];
+  showResultsSearchIcon?: boolean;
+  useCashing?: boolean;
+  useDarkTheme?: boolean;
+  hasSearched?: boolean;
+  maxResults?: number;
 }
 
-const InLocalStorage: FunctionComponent<{
+export const InLocalStorage: FunctionComponent<{
   showResultsSearchIcon: boolean;
   useCashing: boolean;
   useDarkTheme?: boolean;
@@ -28,19 +28,14 @@ const InLocalStorage: FunctionComponent<{
   if (!showResultsSearchIcon) {
     return <div className={classname} />;
   }
-  const icon =
-    searchTermInLocalStorage(result) && useCashing ? (
-      <TimeIcon data-testid={'time_icon_svg'} />
-    ) : (
-      <SearchIcon data-testid={'search_icon_svg'} />
-    );
+  const icon = searchTermInLocalStorage(result) && useCashing ? <TimeIcon /> : <SearchIcon />;
   return <div className={classname}>{icon}</div>;
 };
 
-const Highlight: FunctionComponent<{ text: string; query: string }> = ({ text, query }) => {
+export const Highlight: FunctionComponent<{ text: string; query: string }> = ({ text, query }) => {
   const parts: string[] = getHighlightParts(text, query);
   if (parts.length < 2) {
-    return <span> {text}</span>;
+    return <span>{text}</span>;
   }
   return (
     <span>
@@ -53,13 +48,14 @@ const Highlight: FunctionComponent<{ text: string; query: string }> = ({ text, q
   );
 };
 
-const SecondaryActionClass: FunctionComponent<{
+export const SecondaryActionClass: FunctionComponent<{
   tabIndexStart: number;
   result: string;
   onRemove: (str: string) => void;
   onClick: (str: string) => void;
   useDarkTheme?: boolean;
-}> = ({ tabIndexStart, result, onRemove, onClick, useDarkTheme = false }) => {
+  isSmallScreen: boolean;
+}> = ({ tabIndexStart, result, onRemove, onClick, useDarkTheme = false, isSmallScreen }) => {
   const _searchTermInLocalStorage = searchTermInLocalStorage(result);
   const classname = useDarkTheme ? 'secondary_action_icon dark_secondary_action_icon' : 'secondary_action_icon';
   if (_searchTermInLocalStorage) {
@@ -67,7 +63,6 @@ const SecondaryActionClass: FunctionComponent<{
       <div
         tabIndex={tabIndexStart + 1}
         className={classname}
-        id={'remove_icon'}
         defaultValue={result}
         aria-readonly={'true'}
         title={'Remove ' + result + ' from search history'}
@@ -77,13 +72,11 @@ const SecondaryActionClass: FunctionComponent<{
       </div>
     );
   }
-  const _is_small_screen = screen.availWidth < 480 || isMobile;
-  if (_is_small_screen) {
+  if (isSmallScreen) {
     return (
       <div
         tabIndex={tabIndexStart + 1}
         className={classname}
-        id={'to_searchbar_icon'}
         defaultValue={result}
         aria-readonly={'true'}
         title={'Add ' + result + ' to your searchbar'}
@@ -93,7 +86,7 @@ const SecondaryActionClass: FunctionComponent<{
       </div>
     );
   }
-  return <div className="secondary_action_icon" />;
+  return <div className={classname} />;
 };
 
 export default class Results extends React.Component<ResultsProps> {
@@ -113,7 +106,7 @@ export default class Results extends React.Component<ResultsProps> {
   }
 
   getListElementClass(result: string): string {
-    const value_is_equal = this.props.query.valueOf() === result.valueOf();
+    const value_is_equal = this.props.query === result;
     if (value_is_equal) {
       if (this.props.useDarkTheme) {
         return 'dark_highlight_search_suggestion';
@@ -129,24 +122,28 @@ export default class Results extends React.Component<ResultsProps> {
 
   render() {
     let {
-      query,
+      query = '',
       onSelect,
       onRemove,
       onClick,
-      showResultsSearchIcon,
-      useCashing,
-      useDarkTheme,
-      hasSearched,
-      results,
-      maxResults,
+      showResultsSearchIcon = true,
+      useCashing = true,
+      useDarkTheme = false,
+      hasSearched = false,
+      results = [],
+      maxResults = 10,
     } = this.props;
 
-    let my_results = results;
-    if (my_results == null || my_results.length < 1) {
-      if (useCashing && (query == null || query.length == 0) && hasSearched) {
-        my_results = getSearchTermsInLocalStorage();
+    let myResults = results;
+    let myResultsLength = myResults == null ? 0 : myResults.length;
+    let queryLength = query == null ? 0 : query.length;
+
+    if (myResultsLength < 1) {
+      if (useCashing && queryLength == 0 && hasSearched) {
+        myResults = getSearchTermsInLocalStorage();
+        myResultsLength = myResults.length;
       }
-      if (my_results == null || my_results.length < 1) {
+      if (myResultsLength < 1) {
         return null;
       }
     }
@@ -158,18 +155,20 @@ export default class Results extends React.Component<ResultsProps> {
       onClick: onClick,
       showResultsSearchIcon: showResultsSearchIcon,
       useCashing: useCashing,
-      results: my_results,
+      results: myResults,
       maxResults: maxResults,
       hasSearched: hasSearched,
     };
 
     const class_name = useDarkTheme ? 'ellipsis dark_ellipsis' : 'ellipsis';
 
+    const isSmallScreen = screen.availWidth < 480 || isMobile;
+
     return (
       <>
         <div className="input_to_results" />
         <ul>
-          {my_results.map((result, index) => (
+          {myResults.map((result, index) => (
             <li
               className={this.getListElementClass(result)}
               key={result}
@@ -192,6 +191,7 @@ export default class Results extends React.Component<ResultsProps> {
                 result={result}
                 onRemove={(e) => onRemove(e)}
                 onClick={onClick}
+                isSmallScreen={isSmallScreen}
               />
             </li>
           ))}

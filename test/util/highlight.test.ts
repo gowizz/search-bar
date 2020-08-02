@@ -12,10 +12,14 @@ describe('Highlighting', () => {
     expect(highlights.length).toBe(0);
     /*                               */
     highlights = highlight.getHighlightParts('test', '');
-    expect(highlights.length).toBe(0);
+    expect(highlights.length).toBe(1);
+    expect(highlights).toStrictEqual(['test']);
     /*                               */
     highlights = highlight.getHighlightParts('', 'test');
     expect(highlights.length).toBe(0);
+    highlights = highlight.getHighlightParts('test', null);
+    expect(highlights.length).toBe(1);
+    expect(highlights).toStrictEqual(['test']);
   });
   it('equal queries', async () => {
     let highlights = highlight.getHighlightParts('test', 'test');
