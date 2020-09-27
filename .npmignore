@@ -1,11 +1,12 @@
-lib
 src
 test
 node_modules
 .idea
 .github
+.gitignore
 .prettierignore
 .prettierrc
 .stylelintrc.json
 tsconfig.json
 package-lock.json
+README.md
