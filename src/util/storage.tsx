@@ -1,4 +1,4 @@
-import { uuid } from 'uuidv4';
+import { v4 as uuidv4 } from 'uuid';
 
 interface localstorageObject {
   timestamp: number;
@@ -122,7 +122,7 @@ export function addSearchTermToLocalStorage(name: string): void {
 
 export function generateInputSessionToken(): string {
   const key = 'input_form_token';
-  const token: string = uuid();
+  const token: string = uuidv4();
   sessionStorage.setItem(key, token);
   return token;
 }

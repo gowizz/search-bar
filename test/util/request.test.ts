@@ -89,7 +89,7 @@ describe('Request', () => {
       'test site:example.com site': 'https://gowiz.eu/search/test%20site%20site%3Aexample.com',
       'test site:example.com site:example.org': 'https://gowiz.eu/search/test%20site%3Aexample.org%2Cexample.com',
       'test site:example.com site:http://example.com': 'https://gowiz.eu/search/test%20site%3Aexample.com',
-      'test Site:example.com': 'https://gowiz.eu/search/test%20site%3Aexample.com',
+      'test Site:example.com': 'https://gowiz.eu/search/test%20Site%3Aexample.com',
       'test site:http:example.com': 'https://gowiz.eu/search/test',
       'a message site:example.com from me': 'https://gowiz.eu/search/a%20message%20from%20me%20site%3Aexample.com',
     };
