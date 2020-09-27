@@ -1,6 +1,6 @@
 import { domain_to_host, reformat_url, url_is_valid } from './string_util';
 import { getInputSessionToken, removeInputSessionToken } from './storage';
-import { SearchRequest } from '../models/model';
+import { SearchRequest, SearchRequestResponse } from '../models/model';
 
 const axios = require('axios');
 
@@ -78,14 +78,18 @@ export function getSearchResults(token: string, query: string, API_KEY: string):
 
   if (session_token_from_storage != token) {
     removeInputSessionToken();
-    return null;
+    return {
+      status: SearchRequestResponse.FAILURE,
+      duration: 10,
+      data: [],
+    };
   }
   removeInputSessionToken();
 
   //TODO: implement
 
   return {
-    status: 'success',
+    status: SearchRequestResponse.SUCCESS,
     duration: 1300,
     data: [
       {
@@ -120,6 +124,6 @@ export const fetch_GET = async (url: string, timout_in_seconds: number) => {
       return res.data;
     })
     .catch(() => {
-      return null;
+      return [];
     });
 };

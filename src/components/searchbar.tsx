@@ -34,8 +34,7 @@ export default class Searchbar extends React.Component<SearchbarOptions> {
       return;
     }
 
-    const useCaching =
-      this.props.useCaching != null || this.props.useCaching != undefined ? true : this.props.useCaching;
+    const useCaching = this.props.useCaching != null || this.props.useCaching != undefined;
 
     const res = getQueryAndToken(useCaching);
     const query = res.query;

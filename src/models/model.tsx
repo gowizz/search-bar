@@ -6,7 +6,12 @@ export interface SearchResult {
 }
 
 export interface SearchRequest {
-  status: string;
+  status: SearchRequestResponse;
   duration: number;
   data: SearchResult[];
+}
+
+export enum SearchRequestResponse {
+  SUCCESS,
+  FAILURE,
 }
