@@ -9,7 +9,6 @@ function validate_icon_props(str: string, nr: number): number {
   if (nr < 1) {
     throw new Error(str + " can't be less than 1px");
   }
-  //TODO: validate if nr can be fraction
   return nr;
 }
 
