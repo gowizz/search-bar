@@ -29,16 +29,12 @@ export function goToGowiz(user_query: string, token: string, pre_defined_domains
   //TODO: move this logic to searchcontainer util
 
   query_components = query_components.filter(function (el) {
-    //TODO: we should only use site:
-    //site: +1
-    if (el === 'site:' || el === 'Site:') {
+    if (el === 'site:') {
       return null;
     } else if (el.length > 6) {
-      const el_includes_site = el.includes('site:'); // TODO: oneliner
-      const el_includes_Site = el.includes('Site:'); //
-
-      if (el_includes_site || el_includes_Site) {
-        const parts = el_includes_site ? el.split('site:') : el.split('Site:');
+      const el_includes_site = el.includes('site:');
+      if (el_includes_site) {
+        const parts = el.split('site:');
         all_domains.unshift(parts[1]);
         return null;
       }
