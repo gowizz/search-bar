@@ -18,7 +18,7 @@ export function url_is_valid(domain: string): boolean {
       '(\\#[-a-z\\d_]*)?$',
     'i'
   ); // fragment locator
-  return !!pattern.test(domain);
+  return pattern.test(domain);
 }
 export function domain_to_host(domain: string): string {
   return domain.replace(/^(?:https?:\/\/)?(?:www\.)?/i, '').split('/')[0];
@@ -26,7 +26,7 @@ export function domain_to_host(domain: string): string {
 
 export function string_contains_html_tags(str: string): boolean {
   const pattern = new RegExp(/<([A-Za-z][A-Za-z0-9]*)\b[^>]*>(.*?)<\/\1>/, 'i'); // fragment locator
-  return !!pattern.test(str);
+  return pattern.test(str);
 }
 
 export function format_index(index: number): string {

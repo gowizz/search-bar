@@ -1,14 +1,11 @@
 import React from 'react';
-
-import { removeSearchTermFromLocalStorage } from '../util/storage';
-
-import { HiddenInput } from './hidden_input';
-
+import Fuse from 'fuse.js';
 import Input from './input';
 import Results from './result';
+import { removeSearchTermFromLocalStorage } from '../util/storage';
 import { searchcontainer_has_valid_props } from '../util/component_validation';
-import Fuse from 'fuse.js';
 import { getAutoCompleteValues } from '../util/searchcontainer_util';
+import { HiddenInput } from './hidden_input';
 
 export interface SearchContainerOptions {
   onSubmit: (event: any) => void;
@@ -92,31 +89,13 @@ export default class SearchContainer extends React.PureComponent<SearchContainer
       });
     }
     const updateResults = newResults !== results;
-    const setShowSearchResultToFalse = new_query.length === 0;
 
     let stateUpdate = {
-      hasSearched: undefined,
-      results: undefined,
+      hasSearched: !hasSearched,
+      results: updateResults ? newResults : [],
       query: new_query,
-      showSearchResults: undefined,
+      showSearchResults: new_query.length !== 0,
     };
-
-    if (!hasSearched) {
-      stateUpdate.hasSearched = true;
-    }
-    if (updateResults) {
-      stateUpdate.results = newResults;
-    }
-
-    if (setShowSearchResultToFalse) {
-      if (this.state.showSearchResults === true) {
-        stateUpdate.showSearchResults = false;
-      }
-    } else {
-      if (this.state.showSearchResults === false) {
-        stateUpdate.showSearchResults = true;
-      }
-    }
 
     Object.keys(stateUpdate).forEach((key) => {
       if (stateUpdate[key] === undefined) {

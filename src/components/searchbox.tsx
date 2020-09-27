@@ -28,8 +28,7 @@ export default class Searchbox extends React.PureComponent<SearchboxOptions> {
   handleOnSubmit(event: any): void {
     event.preventDefault();
 
-    const useCaching =
-      this.props.useCaching != null || this.props.useCaching != undefined ? true : this.props.useCaching;
+    const useCaching = this.props.useCaching != null || this.props.useCaching != undefined;
 
     const res = getQueryAndToken(useCaching);
     const should_send_request = res.query != null && res.query.length > 0 && res.token != null;

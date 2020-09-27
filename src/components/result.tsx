@@ -1,9 +1,10 @@
 import React, { FunctionComponent } from 'react';
-import { CancelIcon, LeftArrowIcon, SearchIcon, TimeIcon } from '../assets/icons';
+
 import { isMobile } from 'react-device-detect';
 import { getSearchTermsInLocalStorage, searchTermInLocalStorage } from '../util/storage';
 import { getHighlightParts } from '../util/highlight';
 import shallowCompare from 'react-addons-shallow-compare';
+import { CancelIcon, LeftArrowIcon, SearchIcon, TimeIcon } from '../assets/icons';
 
 export interface ResultsProps {
   query?: string;
@@ -91,11 +92,13 @@ export const SecondaryActionClass: FunctionComponent<{
 
 export default class Results extends React.Component<ResultsProps> {
   shouldComponentUpdate(nextProps: Readonly<ResultsProps>, nextState: Readonly<{}>): boolean {
-    if (this.props.query !== nextProps.query) {
+    const queryIsNotLongEnough = nextProps.query == undefined || nextProps.query.length == 0;
+
+    if (queryIsNotLongEnough) {
+      return true;
+    } else if (this.props.query !== nextProps.query) {
       return true;
     } else if (nextProps.results != this.props.results) {
-      return true;
-    } else if (nextProps.query.length == 0) {
       return true;
     }
 
