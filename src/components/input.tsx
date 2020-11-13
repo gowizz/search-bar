@@ -19,7 +19,7 @@ export const SearchIconClass: FunctionComponent<{ useDarkTheme?: boolean; showIn
     const classname = useDarkTheme ? 'search_icon dark_search_icon' : 'search_icon';
     return (
       <div className={classname}>
-        <SearchIcon data-testid={'search_icon_svg'} />
+        <SearchIcon data-testid="search_icon_svg" />
       </div>
     );
   }
@@ -37,7 +37,7 @@ export const CancelIconClass: FunctionComponent<{
 
     return (
       <div id={'cancel_icon'} tabIndex={2} className={classname} title={'Clear'} onClick={onCancel}>
-        <CancelIcon data-testid={'cancel_icon_svg'} />
+        <CancelIcon data-testid="cancel_icon_svg" />
       </div>
     );
   }

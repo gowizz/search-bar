@@ -111,16 +111,9 @@ export default class Results extends React.Component<ResultsProps> {
   getListElementClass(result: string): string {
     const value_is_equal = this.props.query === result;
     if (value_is_equal) {
-      if (this.props.useDarkTheme) {
-        return 'dark_highlight_search_suggestion';
-      }
-      return 'highlight_search_suggestion';
+      return this.props.useDarkTheme ? 'dark_highlight_search_suggestion' : 'highlight_search_suggestion';
     }
-
-    if (this.props.useDarkTheme) {
-      return 'dark_search_suggestion';
-    }
-    return 'search_suggestion';
+    return this.props.useDarkTheme ? 'dark_search_suggestion' : 'search_suggestion';
   }
 
   render() {
