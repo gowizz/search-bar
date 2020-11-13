@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "./lib",
+    "outDir": "lib",
     "allowJs": false,
     "module": "commonjs",
     "target": "es6",
@@ -22,7 +22,7 @@
     "noFallthroughCasesInSwitch": true,
     "noImplicitThis": true
   },
-  "include": ["./src/**/*"],
+  "include": ["src/*", "src/**/*"],
   "exclude": ["node_modules"]
 }
 /*

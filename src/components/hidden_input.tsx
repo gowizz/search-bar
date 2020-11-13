@@ -1,11 +1,7 @@
-import React, { FunctionComponent } from 'react';
+import React from 'react';
 import { generateInputSessionToken } from '../util/storage';
 
-export const HiddenInput: FunctionComponent = ({}) => {
+export function HiddenInput() {
   const token = generateInputSessionToken();
-  return (
-    <React.Fragment>
-      <input data-testid={'token'} readOnly={true} hidden={true} name={'token'} value={token} />
-    </React.Fragment>
-  );
-};
+  return <input data-testid={'token'} readOnly={true} hidden={true} name={'token'} value={token} />;
+}
