@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "./lib",
+    "outDir": "lib",
     "allowJs": false,
     "module": "commonjs",
     "target": "es6",
@@ -20,9 +20,10 @@
     "noUnusedLocals": true,
     "strictFunctionTypes": true,
     "noFallthroughCasesInSwitch": true,
-    "noImplicitThis": true
+    "noImplicitThis": true,
+    "strictNullChecks": true
   },
-  "include": ["./src/**/*"],
+  "include": ["src/*", "src/**/*"],
   "exclude": ["node_modules"]
 }
 /*
