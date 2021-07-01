@@ -50,7 +50,7 @@
   ],
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.6",
-    "@testing-library/react": "^11.1.2",
+    "@testing-library/react": "^12.0.0",
     "@types/jest": "^26.0.15",
     "@types/react": "^16.9.56",
     "@types/react-addons-shallow-compare": "^0.14.22",
