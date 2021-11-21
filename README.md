@@ -5,7 +5,7 @@ Gowiz search bars are highly customisable powerful components that can enhance y
 ## Getting started
 
 ```bash
-   npm install @gowiz/searchbar
+   npm i @gowiz/searchbar
 ```
 
 After that the following components will be available

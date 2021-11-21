@@ -1,4 +1,4 @@
-.gowiz_searchbar_container {
+.gowiz-searchbar-container {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -13,12 +13,12 @@
   min-height: 38px;
 }
 
-.dark_container {
+.dark-container {
   background-color: #333;
 }
 
 @media (min-width: 1025px) {
-  .gowiz_searchbar_container {
+  .gowiz-searchbar-container {
     width: 61%;
     margin-right: auto;
     margin-left: auto;
@@ -27,7 +27,7 @@
 }
 
 @media (min-width: 901px) and (max-width: 1024px) {
-  .gowiz_searchbar_container {
+  .gowiz-searchbar-container {
     width: 71%;
     margin-right: auto;
     margin-left: auto;
@@ -36,7 +36,7 @@
 }
 
 @media (min-width: 769px) and (max-width: 900px) {
-  .gowiz_searchbar_container {
+  .gowiz-searchbar-container {
     width: 82%;
     margin-right: auto;
     margin-left: auto;
@@ -45,7 +45,7 @@
 }
 
 @media (min-width: 601px) and (max-width: 768px) {
-  .gowiz_searchbar_container {
+  .gowiz-searchbar-container {
     width: 96%;
     margin-right: auto;
     margin-left: auto;
@@ -54,7 +54,7 @@
 }
 
 @media (min-width: 481px) and (max-width: 600px) {
-  .gowiz_searchbar_container {
+  .gowiz-searchbar-container {
     width: 97%;
     margin-right: auto;
     margin-left: auto;
@@ -63,7 +63,7 @@
 }
 
 @media (min-width: 321px) and (max-width: 480px) {
-  .gowiz_searchbar_container {
+  .gowiz-searchbar-container {
     width: 96%;
     margin-right: auto;
     margin-left: auto;
@@ -72,7 +72,7 @@
 }
 
 @media (max-width: 320px) {
-  .gowiz_searchbar_container {
+  .gowiz-searchbar-container {
     width: 95%;
     margin-right: auto;
     margin-left: auto;

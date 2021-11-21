@@ -16,7 +16,7 @@ export const SearchIconClass: FunctionComponent<{ useDarkTheme?: boolean; showIn
   showInputSearchIcon,
 }) => {
   if (showInputSearchIcon) {
-    const classname = useDarkTheme ? 'search_icon dark_search_icon' : 'search_icon';
+    const classname = useDarkTheme ? 'search-icon dark_search-icon' : 'search-icon';
     return (
       <div className={classname}>
         <SearchIcon data-testid="search_icon_svg" />
@@ -33,10 +33,10 @@ export const CancelIconClass: FunctionComponent<{
 }> = ({ useDarkTheme = false, query, onCancel }) => {
   const cancel_button_is_needed = query != undefined && query.length > 0;
   if (cancel_button_is_needed) {
-    const classname = useDarkTheme ? 'cancel_icon dark_cancel_icon' : 'cancel_icon';
+    const classname = useDarkTheme ? 'cancel-icon dark_cancel-icon' : 'cancel-icon';
 
     return (
-      <div id={'cancel_icon'} tabIndex={2} className={classname} title={'Clear'} onClick={onCancel}>
+      <div id={'cancel-icon'} tabIndex={2} className={classname} title={'Clear'} onClick={onCancel}>
         <CancelIcon data-testid="cancel_icon_svg" />
       </div>
     );
@@ -62,14 +62,14 @@ export default class Input extends React.PureComponent<InputProps> {
     const query = this.props.query === undefined || this.props.query === null ? '' : this.props.query;
     const title = query.length === 0 ? 'Search on Gowiz' : 'Search ' + query + ' on Gowiz';
 
-    const container_class = useDarkTheme ? 'search_input dark_input' : 'search_input';
+    const container_class = useDarkTheme ? 'search-input dark-input' : 'search-input';
 
     return (
       <>
         <SearchIconClass useDarkTheme={useDarkTheme} showInputSearchIcon={showInputSearchIcon} />
         <div className={container_class}>
           <input
-            data-testid={'search_input_input'}
+            data-testid={'search-input-input'}
             spellCheck={true}
             defaultValue={query}
             placeholder={placeholder}
