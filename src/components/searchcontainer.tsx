@@ -216,16 +216,16 @@ export default class SearchContainer extends React.PureComponent<SearchContainer
     const results_should_render =
       results !== undefined && results.length > 0 && hasSearched && showSearchResults && query.length > 0;
 
-    const container_class = useDarkTheme ? 'gowiz_searchbar_container dark_container' : 'gowiz_searchbar_container';
+    const container_class = useDarkTheme ? 'gowiz-searchbar-container dark-container' : 'gowiz-searchbar-container';
 
     const results_class = useDarkTheme
-      ? 'gowiz_searchbar_results dark_gowiz_searchbar_results'
-      : 'gowiz_searchbar_results';
+      ? 'gowiz-searchbar-results dark-gowiz-searchbar-results'
+      : 'gowiz-searchbar-results';
 
     return (
       <div className={container_class}>
-        <form onSubmit={(e) => onSubmit(e)} id={'gowiz_searchbox_form'}>
-          <div className="gowiz_searchbar_input">
+        <form onSubmit={(e) => onSubmit(e)} id={'gowiz-searchbox-form'}>
+          <div className="gowiz-searchbar-input">
             <Input
               query={query}
               placeholder={placeholder}

@@ -14,13 +14,13 @@ describe('Exports', () => {
       expect(container.firstChild).toHaveClass('gowiz_searchbar_container');
       expect(container.firstChild.hasChildNodes()).toBe(true);
     });
-    describe('Searchbar', () => {
-      const onSubmit = jest.fn();
-      it('mounts with required props', async () => {
-        let { container } = render(<Searchbar onSubmit={onSubmit} API_KEY={'TEST'} />);
-        expect(container.firstChild).toHaveClass('gowiz_searchbar_container');
-        expect(container.firstChild.hasChildNodes()).toBe(true);
-      });
+  });
+  describe('Searchbar', () => {
+    const onSubmit = jest.fn();
+    it('mounts with required props', async () => {
+      let { container } = render(<Searchbar onSubmit={onSubmit} API_KEY={'TEST'} />);
+      expect(container.firstChild).toHaveClass('gowiz_searchbar_container');
+      expect(container.firstChild.hasChildNodes()).toBe(true);
     });
   });
 });
