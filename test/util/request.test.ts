@@ -4,7 +4,6 @@ import * as locs from '../../src/util/storage';
 describe('Request', () => {
   const { location } = window;
 
-
   beforeAll(() => {
     delete window.location;
     // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
@@ -460,7 +459,7 @@ describe('Request', () => {
       req.goToGowiz(all_queries[i].hello, token);
       expect(window.location.replace).toHaveBeenCalledTimes(1);
       expect(window.location.replace).toHaveBeenCalledWith(
-        'https://gowiz.eu/search/' + encodeURIComponent(all_queries[i].hello),
+        'https://gowiz.eu/search/' + encodeURIComponent(all_queries[i].hello)
       );
     }
   });
@@ -510,7 +509,7 @@ describe('Request', () => {
       '/search': 'https://gowiz.eu/search/%2Fsearch',
       'query/filter': 'https://gowiz.eu/search/query%2Ffilter',
       '5 / 20': 'https://gowiz.eu/search/5%20%2F%2020',
-      'this can\'t be done': 'https://gowiz.eu/search/this%20can\'t%20be%20done',
+      "this can't be done": "https://gowiz.eu/search/this%20can't%20be%20done",
       '1. of January': 'https://gowiz.eu/search/1.%20of%20January',
       '¯\\_(ツ)_/¯': 'https://gowiz.eu/search/%C2%AF%5C_(%E3%83%84)_%2F%C2%AF',
     };
@@ -529,7 +528,7 @@ describe('Request', () => {
     // query, response
     const dict = {
       'https://gowiz.eu/search': 'https://gowiz.eu/search/https%3A%2F%2Fgowiz.eu%2Fsearch',
-      '<script>alert(\'test\');</script>': 'https://gowiz.eu/search/%3Cscript%3Ealert(\'test\')%3B%3C%2Fscript%3E',
+      "<script>alert('test');</script>": "https://gowiz.eu/search/%3Cscript%3Ealert('test')%3B%3C%2Fscript%3E",
       '<!doctype html><html><head> <title>Example Domain</title> <meta charset="utf-8"/> <meta http-equiv="Content-type" content="text/html; charset=utf-8"/> <meta name="viewport" content="width=device-width, initial-scale=1"/> <style type="text/css"> body{background-color: #f0f0f2; margin: 0; padding: 0; font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;}div{width: 600px; margin: 5em auto; padding: 2em; background-color: #fdfdff; border-radius: 0.5em; box-shadow: 2px 3px 7px 2px rgba(0,0,0,0.02);}a:link, a:visited{color: #38488f; text-decoration: none;}@media (max-width: 700px){div{margin: 0 auto; width: auto;}}</style> </head><body><div> <h1>Example Domain</h1> <p>This domain is for use in illustrative examples in documents. You may use this domain in literature without prior coordination or asking for permission.</p><p><a href="https://www.iana.org/domains/example">More information...</a></p></div></body></html>':
         'https://gowiz.eu/search/%3C!doctype%20html%3E%3Chtml%3E%3Chead%3E%20%3Ctitle%3EExample%20Domain%3C%2Ftitle%3E%20%3Cmeta%20charset%3D%22utf-8%22%2F%3E%20%3Cmeta%20http-equiv%3D%22Content-type%22%20content%3D%22text%2Fhtml%3B%20charset%3Dutf-8%22%2F%3E%20%3Cmeta%20name%3D%22viewport%22%20content%3D%22width%3Ddevice-width%2C%20initial-scale%3D1%22%2F%3E%20%3Cstyle%20type%3D%22text%2Fcss%22%3E%20body%7Bbackground-color%3A%20%23f0f0f2%3B%20margin%3A%200%3B%20padding%3A%200%3B%20font-family%3A%20-apple-system%2C%20system-ui%2C%20BlinkMacSystemFont%2C%20%22Segoe%20UI%22%2C%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans-serif%3B%7Ddiv%7Bwidth%3A%20600px%3B%20margin%3A%205em%20auto%3B%20padding%3A%202em%3B%20background-color%3A%20%23fdfdff%3B%20border-radius%3A%200.5em%3B%20box-shadow%3A%202px%203px%207px%202px%20rgba(0%2C0%2C0%2C0.02)%3B%7Da%3Alink%2C%20a%3Avisited%7Bcolor%3A%20%2338488f%3B%20text-decoration%3A%20none%3B%7D%40media%20(max-width%3A%20700px)%7Bdiv%7Bmargin%3A%200%20auto%3B%20width%3A%20auto%3B%7D%7D%3C%2Fstyle%3E%20%3C%2Fhead%3E%3Cbody%3E%3Cdiv%3E%20%3Ch1%3EExample%20Domain%3C%2Fh1%3E%20%3Cp%3EThis%20domain%20is%20for%20use%20in%20illustrative%20examples%20in%20documents.%20You%20may%20use%20this%20domain%20in%20literature%20without%20prior%20coordination%20or%20asking%20for%20permission.%3C%2Fp%3E%3Cp%3E%3Ca%20href%3D%22https%3A%2F%2Fwww.iana.org%2Fdomains%2Fexample%22%3EMore%20information...%3C%2Fa%3E%3C%2Fp%3E%3C%2Fdiv%3E%3C%2Fbody%3E%3C%2Fhtml%3E',
       '<html><body><script>alert("hi")</script></body></html>':

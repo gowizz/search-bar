@@ -1,9 +1,6 @@
 import * as highlight from '../../src/util/highlight';
 
-
-
 describe('Highlighting', () => {
-
   it('empty values', async () => {
     let highlights = highlight.getHighlightParts('', '');
     expect(highlights.length).toBe(0);
