@@ -1,9 +1,5 @@
 import * as highlight from '../../src/util/highlight';
 
-beforeEach(() => {
-  localStorage.clear();
-});
-
 describe('Highlighting', () => {
   it('empty values', async () => {
     let highlights = highlight.getHighlightParts('', '');

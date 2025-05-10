@@ -25,7 +25,7 @@ export const InLocalStorage: FunctionComponent<{
   useDarkTheme?: boolean;
   result: string;
 }> = ({ showResultsSearchIcon, useCashing, useDarkTheme = false, result }) => {
-  const classname = useDarkTheme ? 'result_icon dark_result_icon' : 'result_icon';
+  const classname = useDarkTheme ? 'result-icon dark-result-icon' : 'result-icon';
   if (!showResultsSearchIcon) {
     return <div className={classname} />;
   }
@@ -58,7 +58,7 @@ export const SecondaryActionClass: FunctionComponent<{
   isSmallScreen: boolean;
 }> = ({ tabIndexStart, result, onRemove, onClick, useDarkTheme = false, isSmallScreen }) => {
   const _searchTermInLocalStorage = searchTermInLocalStorage(result);
-  const classname = useDarkTheme ? 'secondary_action_icon dark_secondary_action_icon' : 'secondary_action_icon';
+  const classname = useDarkTheme ? 'secondary-action-icon dark-secondary-action-icon' : 'secondary-action-icon';
   if (_searchTermInLocalStorage) {
     return (
       <div
@@ -111,9 +111,9 @@ export default class Results extends React.Component<ResultsProps> {
   getListElementClass(result: string): string {
     const value_is_equal = this.props.query === result;
     if (value_is_equal) {
-      return this.props.useDarkTheme ? 'dark_highlight_search_suggestion' : 'highlight_search_suggestion';
+      return this.props.useDarkTheme ? 'dark-highlight_search-suggestion' : 'highlight-search-suggestion';
     }
-    return this.props.useDarkTheme ? 'dark_search_suggestion' : 'search_suggestion';
+    return this.props.useDarkTheme ? 'dark-search-suggestion' : 'search-suggestion';
   }
 
   render() {
@@ -156,13 +156,13 @@ export default class Results extends React.Component<ResultsProps> {
       hasSearched: hasSearched,
     };
 
-    const class_name = useDarkTheme ? 'ellipsis dark_ellipsis' : 'ellipsis';
+    const class_name = useDarkTheme ? 'ellipsis dark-ellipsis' : 'ellipsis';
 
     const isSmallScreen = screen.availWidth < 480 || isMobile;
 
     return (
       <>
-        <div className="input_to_results" />
+        <div className="input-to-results" />
         <ul>
           {myResults.map((result, index) => (
             <li

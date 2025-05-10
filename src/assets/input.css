@@ -1,10 +1,10 @@
-.gowiz_searchbar_input {
+.gowiz-searchbar-input {
   height: 38px;
   display: flex;
   align-items: center;
 }
 
-.search_input input {
+.search-input input {
   border: none;
   outline: none;
   background-color: #fff;
@@ -15,12 +15,12 @@
   width: 100%;
 }
 
-.dark_input input {
+.dark-input input {
   background-color: #333;
   color: #fff;
 }
 
-.search_icon {
+.search-icon {
   height: 38px;
   width: 32px;
   display: flex;
@@ -30,74 +30,74 @@
   padding: 0 0 0 8px;
 }
 
-.search_icon svg {
+.search-icon svg {
   fill: grey;
   height: 18px;
   width: 18px;
 }
 
-.dark_search_icon svg {
+.dark-search-icon svg {
   fill: #fff;
 }
 
-.cancel_icon {
+.cancel-icon {
   height: 38px;
   width: 32px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 0 0 0 0;
+  margin: 0;
   padding: 0 8px 0 0;
 }
 
-.cancel_icon svg {
+.cancel-icon svg {
   width: 14px;
   height: 14px;
   fill: black;
 }
 
-.dark_cancel_icon svg {
+.dark-cancel-icon svg {
   fill: grey;
 }
 
 @media (min-width: 1025px) {
-  .search_input {
+  .search-input {
     width: 89%;
   }
 }
 
 @media (min-width: 901px) and (max-width: 1024px) {
-  .search_input {
+  .search-input {
     width: 89%;
   }
 }
 
 @media (min-width: 769px) and (max-width: 900px) {
-  .search_input {
+  .search-input {
     width: 89%;
   }
 }
 
 @media (min-width: 601px) and (max-width: 768px) {
-  .search_input {
+  .search-input {
     width: 89%;
   }
 }
 
 @media (min-width: 481px) and (max-width: 600px) {
-  .search_input {
+  .search-input {
     width: 85%;
   }
 }
 
 @media (min-width: 321px) and (max-width: 480px) {
-  .search_input {
+  .search-input {
     width: 81%;
   }
 }
 
 @media (max-width: 320px) {
-  .search_input {
+  .search-input {
     width: 71%;
   }
 }
